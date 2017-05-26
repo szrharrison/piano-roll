@@ -10,14 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170525225021) do
+ActiveRecord::Schema.define(version: 20170525225024) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name"
     t.string   "family"
     t.boolean  "is_percussion"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "midi_instrument_number"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -27,6 +28,7 @@ ActiveRecord::Schema.define(version: 20170525225021) do
     t.decimal  "start_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "name"
   end
 
   create_table "songs", force: :cascade do |t|
