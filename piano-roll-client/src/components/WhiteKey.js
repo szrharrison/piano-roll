@@ -1,7 +1,7 @@
 import React from 'react'
 
 function WhiteKey(props) {
-    return(<li><span className="tut"></span></li>)
+    return (<li key={props.keyNumber}><span className="tut">{props.keyNumber}</span></li>)
 }
 
 export default WhiteKey
