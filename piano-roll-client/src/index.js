@@ -4,5 +4,8 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+/* For Test Purposes Only */
+import NoteBoard from './containers/NoteBoard'
+
+ReactDOM.render(<NoteBoard />, document.getElementById('root'));
 registerServiceWorker();

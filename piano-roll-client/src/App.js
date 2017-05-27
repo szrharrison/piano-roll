@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import { fetchSong } from './api'
+import Note from './components/Note'
 
 class App extends Component {
   constructor(props) {
@@ -28,11 +29,9 @@ class App extends Component {
       tracks = this.state.song.tracks.map( (track, i) => (
         <li key={i}>
           {track.name}
-          <ul>
-            {track.notes.map( (note,i) => (
-              <li key={i}>{note.name}</li>
-            ) )}
-          </ul>
+          {track.notes.map( (note,i) => (
+            <Note key={i} name={note.name} pitch={note.pitch} start_time={note.start_time} duration={note.duration} velocity={note.velocity} />
+          ) )}
         </li>))
     }
     return (
