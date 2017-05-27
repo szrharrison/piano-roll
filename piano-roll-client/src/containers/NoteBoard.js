@@ -6,6 +6,7 @@ import Note from '../components/Note'
 import NoteBoardSlot from '../components/NoteBoardSlot'
 import { fetchSong } from '../api'
 import { moveNote } from '../subscriptions/Composition'
+import PianoKeysSidebar from './PianoKeysSidebar'
 
 class NoteBoard extends Component {
   constructor(props) {
@@ -46,8 +47,13 @@ class NoteBoard extends Component {
       noteSlots.push(this.renderNoteSlot(i))
     }
     return (
-      <div className="note-board">
-        {noteSlots}
+      <div>
+        <div>
+          <PianoKeysSidebar/>
+        </div>
+        <div className="note-board">
+          {noteSlots}
+        </div>
       </div>
     )
   }
