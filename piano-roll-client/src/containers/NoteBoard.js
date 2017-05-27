@@ -6,7 +6,7 @@ import Note from '../components/Note'
 import NoteBoardSlot from '../components/NoteBoardSlot'
 import { fetchSong } from '../api'
 import { moveNote } from '../subscriptions/Composition'
-import PianoKeysSidebar from './PianoKeysSidebar'
+import PianoKeysSidebar from '../components/PianoKeysSidebar'
 
 class NoteBoard extends Component {
   constructor(props) {

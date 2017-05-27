@@ -1,6 +1,6 @@
 import React from 'react'
-import WhiteKey from '../components/WhiteKey'
-import BlackKey from '../components/BlackKey'
+import WhiteKey from '../components/keys/WhiteKey'
+import BlackKey from '../components/keys/BlackKey'
 
 function PianoKeysSidebar() {
     const oneOctaveKeyPattern = ['white', 'black', 'white', 'black', 'white', 'white', 'black', 'white', 'black', 'white', 'black', 'white' ]
