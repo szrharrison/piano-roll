@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Note from '../src/components/Note'
+import NoteSlot from '../src/components/NoteSlot'
 
 import { fetchSong } from './api'
 
@@ -36,7 +37,9 @@ class App extends Component {
           <h2>Welcome to React</h2>
         </div>
         <div className="notes">
-          {notes}
+          <NoteSlot dark={true} />
+          <NoteSlot dark={false} />
+          <NoteSlot dark={true} />
         </div>
       </div>
     );

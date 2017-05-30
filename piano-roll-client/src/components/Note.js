@@ -3,7 +3,7 @@ import React from 'react'
 function Note(props) {
 
     const noteStyle = {
-      top: `${Math.round(props.pitch * 30)-700}px`,
+      top: `${Math.round(props.pitch * 30)}px`,
       left: `${Math.round(props.start_time * 500)}px`,
       width: `${Math.round(props.duration * 400)}px`
     }
