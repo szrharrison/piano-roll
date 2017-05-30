@@ -9,7 +9,7 @@ function NoteSlot(props) {
     'light': !props.dark
   })
   return (
-    <div className={classes}>
+    <div className={classes} style={{width: `${props.width*500}px`}}>
       {props.children}
     </div>
   )

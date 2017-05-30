@@ -25,22 +25,47 @@ body {
   vertical-align: middle;
 }
 .note-slot {
-    position: relative;
     box-shadow: inset 0 0 10px;
     z-index: -1;
-    display: block;
-    width: calc(100% - var(--piano-keys-width) - 16px);
-    left: calc(var(--piano-keys-width) + 16px);
-    margin-left: 6px;
 }
-
+.note-slots {
+  position: relative;
+  display: block;
+  left: calc(var(--piano-keys-width) + 16px);
+  margin-left: 6px;
+  overflow-x: scroll;
+  width: calc(100% - var(--piano-keys-width) - 16px);
+}
 .dark {
   background-color: #666;
   height: var(--note-slot-width);
 }
+.dark .note {
+  background-color: rgb(103, 148, 103);
+}
 .light {
   background-color: #888;
   height: calc(var(--note-slot-width) + 1px);
+}
+
+#time-bar {
+  position: relative;
+  height: 80px;
+  background-color: #666;
+}
+.second {
+  position: relative;
+  width: 500px;
+  height: 100%;
+  border-right: 2px solid #000;
+}
+.play-head {
+  height: 100%;
+  border-right: 2px solid rgb(255,0,0);
+  background-color: rgba(0,0,0,0);
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 /* CSS Piano */
@@ -71,7 +96,6 @@ Licence: Attribution
   border-bottom: 1px solid #111;
   border-radius: 0 0 7px 0;
   box-shadow: 2px 0 0 #666,3px 0 0 #555,4px 0 0 #444,6px 0 6px black,inset -1px 0 1px rgba(255,255,255,.5),inset -4px 0 5px black,-5px 0 10px black,-2px 10px 14px black;;
-  margin-bottom: 200px;
   position: absolute;
   top: 0;
   left: 0;

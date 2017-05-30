@@ -5,7 +5,8 @@
   "dependencies": {
     "react": "^15.5.4",
     "react-classset": "0.0.2",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "soundfont-player": "^0.10.5"
   },
   "devDependencies": {
     "react-scripts": "1.0.6"
