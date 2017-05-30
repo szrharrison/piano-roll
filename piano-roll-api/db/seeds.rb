@@ -36,7 +36,8 @@ zelda_overworld["tracks"].each do |track|
         name: note["name"],
         pitch: note["midi"],
         start_time: note["time"],
-        velocity: note["velocity"]
+        velocity: note["velocity"],
+        duration: note["duration"]
       }
       note_create = {}.merge({track: this_track}).merge(note_info)
       Note.create( note_create )

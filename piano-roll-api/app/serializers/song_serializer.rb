@@ -16,7 +16,7 @@ class SongSerializer < ActiveModel::Serializer
       custom_track[:instrument] = track.instrument.slice(:id, :name, :family, :is_percussion, :midi_instrument_number)
 
       # has_many w/only specified attributes
-      custom_track[:notes] = track.notes.collect{|proposal| proposal.slice(:id, :name, :start_time, :velocity, :pitch)}
+      custom_track[:notes] = track.notes.collect{|proposal| proposal.slice(:id, :name, :start_time, :velocity, :pitch, :duration)}
       # ===========================================================
       customized_tracks.push(custom_track)
     end

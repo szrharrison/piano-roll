@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Note from '../src/components/Note'
 
 import { fetchSong } from './api'
 import Note from './components/Note'
@@ -24,25 +25,21 @@ class App extends Component {
   }
 
   render() {
-    let tracks
-    if(this.state.song.title) {
-      tracks = this.state.song.tracks.map( (track, i) => (
-        <li key={i}>
-          {track.name}
-          {track.notes.map( (note,i) => (
-            <Note key={i} name={note.name} pitch={note.pitch} start_time={note.start_time} duration={note.duration} velocity={note.velocity} />
-          ) )}
-        </li>))
+
+    let notes
+    if (this.state.song.title) {
+      notes = this.state.song.tracks.map( (track, i) => track.notes.map( (note,i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time}/>))
     }
+
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <ul className="tracks">
-          {tracks}
-        </ul>
+        <div className="notes">
+          {notes}
+        </div>
       </div>
     );
   }
