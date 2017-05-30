@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Note from '../src/components/Note'
 
 import { fetchSong } from './api'
 import Note from './components/Note'
