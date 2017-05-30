@@ -1,11 +1,8 @@
 import React from 'react'
-import WhiteKey from './keys/WhiteKey'
-import BlackKey from './keys/BlackKey'
+import Key from './Key'
 
-function PianoKeysSidebar() {
-    const oneOctaveKeyPattern = ['white', 'black', 'white', 'black', 'white', 'white', 'black', 'white', 'black', 'white', 'black', 'white' ]
-    const sevenOctavePiano = replicateOctaveKeyPattern(oneOctaveKeyPattern, 13)
-    const pianoOctave = sevenOctavePiano.map((pianoKey, i) => (pianoKey === 'white') ? <WhiteKey keyNumber={i} /> : <BlackKey keyNumber={i}/> )
+function PianoKeysSidebar(props) {
+    const pianoOctave = props.sevenOctavePiano.map((pianoKey, i) => <Key name={pianoKey} key={i} white={props.whiteKeys.includes(pianoKey)} />)
 
     return (
         <nav id="nav-piano">
@@ -14,12 +11,6 @@ function PianoKeysSidebar() {
             </ul>
         </nav>
     )
-}
-
-function replicateOctaveKeyPattern(keyPatternArray, numTimes) {
-    let arrays = Array.apply(null, new Array(numTimes))
-    arrays = arrays.map(() => keyPatternArray )
-    return [].concat.apply([], arrays)
 }
 
 export default PianoKeysSidebar

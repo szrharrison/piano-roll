@@ -1,9 +1,16 @@
+:root {
+  --note-slot-width: 26px;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
 }
 
+.notes {
+  position: relative;
+}
 .note {
     position: absolute;
     height: 15px;
@@ -12,16 +19,21 @@ body {
 }
 .note-slot {
     position: relative;
-    height: 15px;
-    padding: 4px;
     box-shadow: inset 0 0 10px;
+    z-index: -1;
+    display: block;
+    width: calc(75% - 16px);
+    left: calc(25% + 16px);
+    margin-left: 4px;
 }
 
 .dark {
   background-color: #666;
+  height: var(--note-slot-width);
 }
 .light {
   background-color: #888;
+  height: calc(var(--note-slot-width) + 1px);
 }
 
 /* CSS Piano */
@@ -43,18 +55,19 @@ Licence: Attribution
 */
 
 #nav-piano {
-  display:block;
-  background-color:#222;
-  background-image:linear-gradient(60deg,#111,#333,#111,#3c3c3c,#333 70%);
-  width:300px;
-  padding:0 15px 40px 0;
-  border-right:1px solid #111;
-  border-bottom:1px solid #111;
-  border-radius:0 0 7px 0;
-  box-shadow:2px 0 0 #666,3px 0 0 #555,4px 0 0 #444,6px 0 6px black,inset -1px 0 1px rgba(255,255,255,.5),inset -4px 0 5px black,-5px 0 10px black,-2px 10px 14px black;;
-  float:left;
-  margin-top:-10px;
-  margin-bottom:200px;
+  display: block;
+  background-color: #222;
+  background-image: linear-gradient(60deg, #111, #333, #111, #3c3c3c, #333 70%);
+  width: 25%;
+  padding: 0 15px 40px 0;
+  border-right: 1px solid #111;
+  border-bottom: 1px solid #111;
+  border-radius: 0 0 7px 0;
+  box-shadow: 2px 0 0 #666,3px 0 0 #555,4px 0 0 #444,6px 0 6px black,inset -1px 0 1px rgba(255,255,255,.5),inset -4px 0 5px black,-5px 0 10px black,-2px 10px 14px black;;
+  margin-bottom: 200px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 #nav-piano ul,
@@ -65,12 +78,16 @@ Licence: Attribution
   position:relative;
 }
 
+#nav-piano .wide, #nav-piano .wide .tut {
+  height: calc(2 * var(--note-slot-width) + 1px);
+}
+
 #nav-piano ul {box-shadow:0 2px 5px black}
 
-#nav-piano a,
+#nav-piano span,
 #nav-piano .tut {
   display:block;
-  height:40px;
+  height: calc( var(--note-slot-width)*3/2 + 1px);
   padding:0 18px 0 0;
   background-color:#fafafa;
   background-image:linear-gradient(-30deg,#f5f5f5,white);
@@ -87,34 +104,34 @@ Licence: Attribution
   overflow:hidden;
 }
 
-#nav-piano a:focus,
-#nav-piano a:active {outline:none}
+#nav-piano span:focus,
+#nav-piano span:active {outline:none}
 
-#nav-piano .black-tut a,
+#nav-piano .black-tut span,
 #nav-piano .black-tut .tut {
   width:58%;
   z-index:2;
   background-color:#111;
   background-image:linear-gradient(-20deg,#333,black,#333);
-  height:26px;
+  height: var(--note-slot-width);
   line-height:24px;
   font-size:11px;
   text-shadow:0 -1px 0 black;
   color:#555;
-  margin-top:-13px;
-  margin-bottom:-13px;
+  margin-top: calc(-1/2 * var(--note-slot-width));
+  margin-bottom: calc(-1/2 * var(--note-slot-width));
   border-width:2px 7px 2px 1px;
   border-style:solid;
   border-color:#666 #222 #111 #555;
   box-shadow:inset -1px 0 2px rgba(255,255,255,.4),2px 0 3px rgba(0,0,0,.4);
 }
 
-#nav-piano a:active {
+#nav-piano span:active {
   background-color:#f5f5f5;
   margin-right:1px;
   box-shadow:0 2px 2px rgba(0,0,0,.4);
 }
-#nav-piano .black-tut a:active {
+#nav-piano .black-tut span:active {
   border-right-width:2px;
   left:-2px;
   box-shadow:inset -1px 0 1px rgba(255,255,255,.4),1px 0 0 rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.4),1px 0 0 black;

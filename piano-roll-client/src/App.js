@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Note from '../src/components/Note'
-import NoteSlot from '../src/components/NoteSlot'
+import Note from './components/Note'
+import NoteSlot from './components/NoteSlot'
+import PianoKeysSidebar from './components/PianoKeysSidebar'
 
 import { fetchSong } from './api'
 
@@ -24,22 +24,30 @@ class App extends Component {
     })
   }
 
+  replicateOctaveKeyPattern(keyPatternArray, numTimes) {
+    let arrays = Array.apply(null, new Array(numTimes))
+    arrays = arrays.map(() => keyPatternArray )
+    return [].concat.apply([], arrays)
+  }
+
+
+
   render() {
-    let notes
-    if (this.state.song.title) {
-      notes = this.state.song.tracks.map( (track, i) => track.notes.map( (note,i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time}/>))
-    }
+    // let notes
+    // if (this.state.song.title) {
+    //   notes = this.state.song.tracks.map( (track, i) => track.notes.map( (note,i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time}/>))
+    // }
+
+    const oneOctaveKeyPattern = ['E', 'D#', 'D', 'C#', 'C', 'B', 'A#', 'A', 'G#', 'G', 'F#', 'F' ]
+    const whiteKeys = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+    const blackKeys = ['A#', 'C#', 'D#', 'F#', 'G#']
+    const sevenOctavePiano = this.replicateOctaveKeyPattern(oneOctaveKeyPattern, 13)
 
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
         <div className="notes">
-          <NoteSlot dark={true} />
-          <NoteSlot dark={false} />
-          <NoteSlot dark={true} />
+          <PianoKeysSidebar sevenOctavePiano={sevenOctavePiano} whiteKeys={whiteKeys}/>
+          {sevenOctavePiano.map((pianoKey, i) => <NoteSlot dark={blackKeys.includes(pianoKey)} />)}
         </div>
       </div>
     );
