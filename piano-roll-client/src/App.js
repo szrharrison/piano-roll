@@ -26,28 +26,49 @@ class App extends Component {
 
   replicateOctaveKeyPattern(keyPatternArray, numTimes) {
     let arrays = Array.apply(null, new Array(numTimes))
-    arrays = arrays.map(() => keyPatternArray )
-    return [].concat.apply([], arrays)
+    arrays = this.flatten( arrays, keyPatternArray).slice(-128)
+    return arrays
   }
 
+  flatten( arr, keyPattern ) {
+    let n = 0
+    return arr.reduce(function(acc, val) {
+      const addArr = keyPattern.map( key => `${key}${n}` )
+      n += 1
+      return addArr.concat( acc )
+    }, [])
+  }
 
+  oneOctaveKeyPattern = ['B', 'A#', 'A', 'G#', 'G', 'F#', 'F', 'E', 'D#', 'D', 'C#', 'C' ]
+  sevenOctavePiano = this.replicateOctaveKeyPattern(this.oneOctaveKeyPattern, 11)
+
+  renderNotes(pitch) {
+    if (this.state.song.title ) {
+      let tracks = [...this.state.song.tracks]
+      let trackNotes = tracks.map( (track, i) => track.notes )
+      let notes = trackNotes.reduce( (acc, trackNotes) => {
+        return acc.concat(trackNotes)
+      },
+      [] )
+      let noteSlotNotes = notes.filter( note => note.pitch == pitch )
+      console.log(noteSlotNotes)
+      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time}/>)
+
+      return noteComponents
+    }
+  }
 
   render() {
-    // let notes
-    // if (this.state.song.title) {
-    //   notes = this.state.song.tracks.map( (track, i) => track.notes.map( (note,i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time}/>))
-    // }
-
-    const oneOctaveKeyPattern = ['E', 'D#', 'D', 'C#', 'C', 'B', 'A#', 'A', 'G#', 'G', 'F#', 'F' ]
-    const whiteKeys = ['A', 'B', 'C', 'D', 'E', 'F', 'G']
-    const blackKeys = ['A#', 'C#', 'D#', 'F#', 'G#']
-    const sevenOctavePiano = this.replicateOctaveKeyPattern(oneOctaveKeyPattern, 13)
 
     return (
       <div className="App">
         <div className="notes">
-          <PianoKeysSidebar sevenOctavePiano={sevenOctavePiano} whiteKeys={whiteKeys}/>
-          {sevenOctavePiano.map((pianoKey, i) => <NoteSlot dark={blackKeys.includes(pianoKey)} />)}
+          <PianoKeysSidebar sevenOctavePiano={this.sevenOctavePiano} />
+          {this.sevenOctavePiano.map((pianoKey, i) => {
+            return <NoteSlot key={i} dark={pianoKey.search('#') !== -1}>
+              {this.renderNotes(i)}
+            </NoteSlot>
+          })}
         </div>
       </div>
     );
