@@ -223,3 +223,36 @@ Licence: Attribution
   font-size:11px;
   font-style:italic;
 }
+
+/* Timeline Styles */
+
+@import "../../../variables";
+
+:root {
+  --line-color: var(--brand-warning);
+  --line-width: 4px;
+
+  --layer-header-width: 7em;
+}
+
+.timeline {
+  position: absolute 0 0 0 var(--layer-header-width);
+  pointer-events: none;
+}
+
+.enabled {
+}
+
+.disabled {
+}
+
+.line {
+  position: absolute;
+  top: 0.1em;
+  width: var(--line-width);
+  height: calc(100% - 0.5em);
+  z-index: 40;
+  opacity: 0.5;
+  background-color: var(--line-color);
+  box-shadow: 0 0 1px 1px rgba(#000, 0.3);
+}

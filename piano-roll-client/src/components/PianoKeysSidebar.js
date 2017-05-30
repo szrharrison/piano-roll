@@ -4,8 +4,8 @@ import BlackKey from '../components/keys/BlackKey'
 
 function PianoKeysSidebar() {
     const oneOctaveKeyPattern = ['white', 'black', 'white', 'black', 'white', 'white', 'black', 'white', 'black', 'white', 'black', 'white' ]
-    const sevenOctavePiano = replicateOctaveKeyPattern(oneOctaveKeyPattern, 13)
-    const pianoOctave = sevenOctavePiano.map((pianoKey, i) => (pianoKey === 'white') ? <WhiteKey keyNumber={i} /> : <BlackKey keyNumber={i}/> )
+    const multiOctavePiano = replicateOctaveKeyPattern(oneOctaveKeyPattern, 13)
+    const pianoOctave = multiOctavePiano.map((pianoKey, i) => (pianoKey === 'white') ? <WhiteKey keyNumber={i} /> : <BlackKey keyNumber={i}/> )
     
     return (
         <nav id="nav-piano">

@@ -7,7 +7,8 @@
     "react-classset": "0.0.2",
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-line": "^1.0.2"
   },
   "devDependencies": {
     "react-scripts": "1.0.6"
