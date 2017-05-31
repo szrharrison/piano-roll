@@ -17,12 +17,11 @@ class App extends Component {
       song: {},
       time: 0,
       playing: false,
-      paused: false
+      paused: true
     }
 
     this.countDownTick = this.countDownTick.bind(this)
     this.handlePressPlay = this.handlePressPlay.bind(this)
-    this.handlePressPause = this.handlePressPause.bind(this)
   }
 
   componentDidMount() {
@@ -35,30 +34,30 @@ class App extends Component {
   }
 
   handlePressPlay() {
-    this.timer = new Timer(this.state.song.duration * 1000, 20, this.countDownTick)
-    this.timer.start()
-    this.setState({
-      playing: true,
-      paused: false
-    })
-  }
-
-  handlePressPause() {
-    if(this.state.paused) {
-      console.log('Resuming timer')
-      this.setState({ paused: false })
-      this.timer.resume()
+    if(!this.state.playing) {
+      this.timer = new Timer(this.state.song.duration, this.countDownTick)
+      this.timer.start()
+      this.setState({
+        playing: true,
+        paused: false
+      })
     } else {
-      console.log('Pausing timer')
-      this.setState({ paused: true })
-      this.timer.pause()
+      if(this.state.paused) {
+        console.log('Resuming timer')
+        this.setState({ paused: false })
+        this.timer.pauseResume()
+      } else {
+        console.log('Pausing timer')
+        this.setState({ paused: true })
+        this.timer.pauseResume()
+      }
     }
   }
 
-  countDownTick(remaining) {
+  countDownTick(passed) {
     this.setState(prevState => {
       return {
-        time: prevState.song.duration - remaining/1000
+        time: passed / 20
       }
     })
   }
@@ -90,25 +89,26 @@ class App extends Component {
 
       let notes = trackNotes[0]
       let noteSlotNotes = notes.filter( note => note.pitch === 139 - pitch )
-      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time} currentTime={this.state.time} />)
+      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time} currentTime={this.state.time} ac={this.ac} />)
 
       return noteComponents
     }
   }
 
   render() {
-
+    const playheadStyle = {width: this.state.time * 200}
     return (
       <div className="App">
         <div className="notes">
           <PianoKeysSidebar sevenOctavePiano={this.sevenOctavePiano} ac={this.ac} />
           <div className="note-slots">
+            <div className="play-head" style={playheadStyle}>{this.props.currentTime}</div>
             {this.sevenOctavePiano.map((pianoKey, i) => {
               return <NoteSlot key={i} dark={pianoKey.search('#') !== -1} width={this.state.song.duration}>
                 {this.renderNotes(i)}
               </NoteSlot>
             })}
-            <TimeBar duration={this.state.song.duration} currentTime={this.state.time} onPlay={this.handlePressPlay} onPause={this.handlePressPause} updater={this.countDownTick} />
+            <TimeBar duration={this.state.song.duration} currentTime={this.state.time} onClick={this.handlePressPlay} playing={this.state.playing} paused={this.state.paused} />
           </div>
         </div>
       </div>

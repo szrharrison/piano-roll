@@ -11,16 +11,14 @@ class TimeBar extends Component {
     let style, dividers
     if(this.props.duration) {
       style = {
-        width: this.props.duration * 500
+        width: this.props.duration * 200
       }
       dividers = Array.apply(null, new Array(Math.floor(this.props.duration))).map( (e,i) => <div className="second" key={i}></div> )
     }
-    const playheadStyle = {width: this.props.currentTime * 500}
     return (
       <div id="time-bar" style={style}>
-        <button onClick={this.props.onPlay}>Play</button>
-        <button onClick={this.props.onPause}>Pause/Resume</button>
-        <div className="play-head" style={playheadStyle}>{this.props.currentTime}</div>
+        <div className="time">{this.props.currentTime}</div>
+        <button onClick={this.props.onClick}>{this.props.paused? '▶️' : '⏸'}</button>
         {dividers}
       </div>
     )
