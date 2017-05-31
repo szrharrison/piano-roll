@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "jazz-midi": "^1.5.4",
+    "jzz": "^0.3.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },

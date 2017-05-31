@@ -1,4 +1,5 @@
 import React from 'react'
+import PlayNote2 from './PlayNote2'
 
 function Note(props) {
 
@@ -8,8 +9,13 @@ function Note(props) {
       width: `${Math.round(props.duration * 400)}px`
     }
 
+    const handleClick = () => {
+      console.log('got here')
+      return <PlayNote2 />
+    }
+
     return (
-      <div className="note" style={noteStyle}>
+      <div onClick={handleClick.bind(this)} className="note" style={noteStyle}>
         {props.name}
       </div>
     )
