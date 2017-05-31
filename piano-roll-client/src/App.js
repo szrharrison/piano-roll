@@ -6,8 +6,8 @@ import Note from './components/Note'
 import NoteSlot from './components/NoteSlot'
 import PianoKeysSidebar from './components/PianoKeysSidebar'
 import TimeBar from './components/TimeBar'
-import Timer from './api/Timer'
 import { fetchSong } from './api'
+import Timer from './api/Timer'
 
 class App extends Component {
   constructor(props) {
@@ -15,8 +15,14 @@ class App extends Component {
 
     this.state = {
       song: {},
-      time: 0
+      time: 0,
+      playing: false,
+      paused: false
     }
+
+    this.countDownTick = this.countDownTick.bind(this)
+    this.handlePressPlay = this.handlePressPlay.bind(this)
+    this.handlePressPause = this.handlePressPause.bind(this)
   }
 
   componentDidMount() {
@@ -29,17 +35,31 @@ class App extends Component {
   }
 
   handlePressPlay() {
-    var i = this.state.song.duration; //duration in seconds
+    this.timer = new Timer(this.state.song.duration * 1000, 20, this.countDownTick)
+    this.timer.start()
+    this.setState({
+      playing: true,
+      paused: false
+    })
+  }
 
-    //the ATimer below works with time values in milliseconds
-    //the "20" will update display ever 20 milliseconds, as fast as screen refreshes
-    var timerID = new Timer(i * 1000, 20, this.countDownTick.bind(this))
-    timerID.start()
+  handlePressPause() {
+    if(this.state.paused) {
+      console.log('Resuming timer')
+      this.setState({ paused: false })
+      this.timer.resume()
+    } else {
+      console.log('Pausing timer')
+      this.setState({ paused: true })
+      this.timer.pause()
+    }
   }
 
   countDownTick(remaining) {
-    this.setState({
-      time: parseFloat(remaining.millisecondsToHundredthsString())
+    this.setState(prevState => {
+      return {
+        time: prevState.song.duration - remaining/1000
+      }
     })
   }
 
@@ -70,7 +90,7 @@ class App extends Component {
 
       let notes = trackNotes[0]
       let noteSlotNotes = notes.filter( note => note.pitch === 139 - pitch )
-      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time}/>)
+      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time} currentTime={this.state.time} />)
 
       return noteComponents
     }
@@ -88,9 +108,9 @@ class App extends Component {
                 {this.renderNotes(i)}
               </NoteSlot>
             })}
+            <TimeBar duration={this.state.song.duration} currentTime={this.state.time} onPlay={this.handlePressPlay} onPause={this.handlePressPause} updater={this.countDownTick} />
           </div>
         </div>
-        <TimeBar duration={this.state.song.duration} currentTime={this.state.time} onClick={this.handlePressPlay.bind(this)}/>
       </div>
     );
   }

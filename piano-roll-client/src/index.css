@@ -53,11 +53,24 @@ body {
   height: 80px;
   background-color: #666;
 }
+#time-bar button {
+  position: absolute;
+  left: 0;
+  height: 33%;
+  top: 66%;
+  z-index: 1;
+}
+#time-bar button:first-of-type {
+  top: 33%;
+}
+
 .second {
   position: relative;
+  display: inline-block;
   width: 500px;
   height: 100%;
   border-right: 2px solid #000;
+  z-index: 0;
 }
 .play-head {
   height: 100%;

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170526172901) do
+ActiveRecord::Schema.define(version: 20170526172904) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name"
@@ -23,9 +23,9 @@ ActiveRecord::Schema.define(version: 20170526172901) do
 
   create_table "notes", force: :cascade do |t|
     t.integer  "track_id"
-    t.decimal  "velocity"
+    t.float    "velocity"
     t.integer  "pitch"
-    t.decimal  "start_time"
+    t.float    "start_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "name"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20170526172901) do
 
   create_table "songs", force: :cascade do |t|
     t.string   "title"
-    t.decimal  "duration"
+    t.float    "duration"
     t.integer  "bpm"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -42,8 +42,8 @@ ActiveRecord::Schema.define(version: 20170526172901) do
 
   create_table "tracks", force: :cascade do |t|
     t.integer  "song_id"
-    t.decimal  "start_time"
-    t.decimal  "duration"
+    t.float    "start_time"
+    t.float    "duration"
     t.string   "name"
     t.integer  "instrument_id"
     t.integer  "channel_number"

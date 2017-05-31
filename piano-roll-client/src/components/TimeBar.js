@@ -1,20 +1,35 @@
-import React from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-function TimeBar(props) {
-  let style, dividers
-  if(props.duration) {
-    style = {
-      width: props.duration * 500
-    }
-    dividers = Array.apply(null, new Array(Math.floor(props.duration))).map( (e,i) => <div className="second" key={i}></div> )
+class TimeBar extends Component {
+  constructor(props) {
+    super(props)
+
   }
-  const playheadStyle = {width: props.currentTime * 500}
-  return (
-    <div id="time-bar" style={style} onClick={props.onClick}>
-      <div className="play-head" style={playheadStyle}></div>
-      {dividers}
-    </div>
-  )
+
+  render() {
+    let style, dividers
+    if(this.props.duration) {
+      style = {
+        width: this.props.duration * 500
+      }
+      dividers = Array.apply(null, new Array(Math.floor(this.props.duration))).map( (e,i) => <div className="second" key={i}></div> )
+    }
+    const playheadStyle = {width: this.props.currentTime * 500}
+    return (
+      <div id="time-bar" style={style}>
+        <button onClick={this.props.onPlay}>Play</button>
+        <button onClick={this.props.onPause}>Pause/Resume</button>
+        <div className="play-head" style={playheadStyle}>{this.props.currentTime}</div>
+        {dividers}
+      </div>
+    )
+  }
+}
+
+TimeBar.propTypes = {
+  currentTime: PropTypes.number.isRequired,
+  duration: PropTypes.number
 }
 
 export default TimeBar
