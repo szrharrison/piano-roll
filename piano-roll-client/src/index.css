@@ -3,10 +3,58 @@
   --piano-keys-width: 340px;
 }
 
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+}
+
+.tracks-header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+}
+
+.tracks-header {
+  display: block;
+}
+.tracks-header img {
+  height: 50px;
+  width: 50px;
+}
+
+.tracks-header li {
+  display: inline;
+  float: left;
+}
+
+.tracks-header li span {
+  display: block;
+  background-color: #333;
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  padding: 14px 16px;
+}
+
+.tracks-header li span:hover {
+  background-color: #111;
+}
+.tracks-header .active {
+    background-color: #4caf50;
 }
 
 .notes {

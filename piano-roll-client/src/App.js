@@ -6,31 +6,70 @@ import Note from './components/Note'
 import NoteSlot from './components/NoteSlot'
 import PianoKeysSidebar from './components/PianoKeysSidebar'
 import TimeBar from './components/TimeBar'
-import { fetchSong } from './api'
+import { fetchSong, fetchSongs } from './api'
 import Timer from './api/Timer'
+import TracksHeader from './components/TracksHeader'
+import SongSelector from './components/SongSelector'
 
 class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      songs: [],
       song: {},
       time: 0,
       playing: false,
-      paused: true
+      paused: true,
+      track: 1
     }
 
     this.countDownTick = this.countDownTick.bind(this)
     this.handlePressPlay = this.handlePressPlay.bind(this)
+    this.handleSwitchTrack = this.handleSwitchTrack.bind(this)
+    this.handleSelectSong = this.handleSelectSong.bind(this)
   }
 
   componentDidMount() {
-    fetchSong()
+    fetchSongs()
+      .then( songs => {
+        this.setState({
+          songs: songs
+        })
+    })
+
+    this.instrument = Soundfont.instrument( this.ac,
+      'clarinet'
+    )
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.track !== this.state.track ) {
+      this.instrument = Soundfont.instrument( this.ac,
+        this.tracks[nextState.track].instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
+      )
+    }
+    if (nextState.song.id !== this.state.song.id) {
+      this.tracks = [...nextState.song.tracks].reduce( (acc, track) => {
+        return Object.assign(acc, { [track.id]: {instrument: track.instrument, notes: track.notes} })
+      }, {} )
+    }
+  }
+
+  handleSwitchTrack(trackId) {
+    this.setState({
+      track: trackId
+    })
+  }
+
+  handleSelectSong(songID) {
+    fetchSong(songID)
       .then( song => {
+        console.log(song)
         this.setState({
           song: song
         })
-    })
+      })
   }
 
   handlePressPlay() {
@@ -43,11 +82,9 @@ class App extends Component {
       })
     } else {
       if(this.state.paused) {
-        console.log('Resuming timer')
         this.setState({ paused: false })
         this.timer.pauseResume()
       } else {
-        console.log('Pausing timer')
         this.setState({ paused: true })
         this.timer.pauseResume()
       }
@@ -79,17 +116,14 @@ class App extends Component {
 
   oneOctaveKeyPattern = ['B', 'A#', 'A', 'G#', 'G', 'F#', 'F', 'E', 'D#', 'D', 'C#', 'C' ]
   sevenOctavePiano = this.replicateOctaveKeyPattern(this.oneOctaveKeyPattern, 11)
-  ac = Soundfont.instrument(new AudioContext(), 'clarinet')
+  ac = new AudioContext()
 
   renderNotes(pitch) {
     if (this.state.song.title ) {
-      let tracks = [...this.state.song.tracks]
 
-      let trackNotes = tracks.map( (track, i) => track.notes )
-
-      let notes = trackNotes[0]
+      let notes = this.tracks[this.state.track].notes
       let noteSlotNotes = notes.filter( note => note.pitch === 139 - pitch )
-      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time} currentTime={this.state.time} ac={this.ac} />)
+      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={i} name={note.name} pitch={note.pitch} duration={note.duration} start_time={note.start_time} currentTime={this.state.time} instrument={this.instrument} />)
 
       return noteComponents
     }
@@ -99,8 +133,10 @@ class App extends Component {
     const playheadStyle = {width: this.state.time * 200}
     return (
       <div className="App">
+        <SongSelector songs={this.state.songs} onChange={this.handleSelectSong} />
+        <TracksHeader track={this.state.track} tracks={this.state.song.tracks} onClick={this.handleSwitchTrack} />
         <div className="notes">
-          <PianoKeysSidebar sevenOctavePiano={this.sevenOctavePiano} ac={this.ac} />
+          <PianoKeysSidebar sevenOctavePiano={this.sevenOctavePiano} instrument={this.instrument} />
           <div className="note-slots">
             <div className="play-head" style={playheadStyle}>{this.props.currentTime}</div>
             {this.sevenOctavePiano.map((pianoKey, i) => {

@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 class TimeBar extends Component {
-  constructor(props) {
-    super(props)
-
-  }
 
   render() {
     let style, dividers
