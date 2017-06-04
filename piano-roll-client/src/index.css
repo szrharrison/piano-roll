@@ -30,6 +30,7 @@ body {
 
 .tracks-header {
   display: block;
+  background-color: #333;
 }
 .tracks-header img {
   height: 50px;

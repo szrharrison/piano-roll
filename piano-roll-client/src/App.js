@@ -38,15 +38,18 @@ class App extends Component {
         })
     })
 
-    this.instrument = Soundfont.instrument( this.ac,
-      'clarinet'
+    this.instrument = Soundfont.instrument(
+      this.ac,
+      'clarinet',
+      { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
     )
   }
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.track !== this.state.track ) {
       this.instrument = Soundfont.instrument( this.ac,
-        this.tracks[nextState.track].instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
+        this.tracks[nextState.track].instrument.name.replace(/ /g,"_").replace(/[()]/g,""),
+        { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
       )
     }
     if (nextState.song.id !== this.state.song.id) {

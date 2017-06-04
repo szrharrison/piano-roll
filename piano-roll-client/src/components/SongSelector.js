@@ -1,7 +1,6 @@
 import React from 'react'
 import FileInput from 'react-file-input'
 import midiConverter from 'midi-converter'
-import fs from 'fs'
 
 function SongSelector(props) {
 
@@ -16,8 +15,9 @@ function SongSelector(props) {
 
 
     reader.onloadend = () => {
-      var jsonSong = midiConverter.midiToJson(reader.result);
-      console.log('Selected file:', jsonSong)
+      const base64 = reader.result.slice(reader.result.search(/,/) + 1)
+      var jsonSong = midiConverter.midiToJson(atob(base64))
+      console.log(jsonSong)
     }
 
     reader.readAsDataURL(file)
