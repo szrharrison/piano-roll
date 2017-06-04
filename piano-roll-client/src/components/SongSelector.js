@@ -1,6 +1,5 @@
 import React from 'react'
-import FileInput from 'react-file-input'
-import midiConverter from 'midi-converter'
+import MidiConvert from 'midiconvert'
 
 function SongSelector(props) {
 
@@ -16,8 +15,8 @@ function SongSelector(props) {
 
     reader.onloadend = () => {
       const base64 = reader.result.slice(reader.result.search(/,/) + 1)
-      var jsonSong = midiConverter.midiToJson(atob(base64))
-      console.log(jsonSong)
+      var jsonSong = MidiConvert.parse(atob(base64))
+      
     }
 
     reader.readAsDataURL(file)
@@ -36,9 +35,10 @@ function SongSelector(props) {
         {options}
       </select>
       <form>
-        <FileInput name="midi-file"
-          accept=".midi"
-          placeholder="Add New Song"
+        <input name="midi-file"
+          type="file"
+          accept=".midi,.mid"
+          placeholder="Add a New Song"
           className="file-input"
           onChange={handleAdd} />
       </form>

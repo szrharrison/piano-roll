@@ -1,12 +1,10 @@
 import React from 'react'
 import classSet from 'react-classset'
-
-const wideKeys = ['D[0-9]', 'A[0-9]', 'G[0-9]']
+import { wideKeys } from '../concerns/keyboard'
+import {triggerNote} from '../api/ToneKeyboardHandler'
 
 const handleClick = (instrument, key) => {
-  instrument.then(function(clarinet) {
-    clarinet.play(key, instrument.currentTime, { duration: 0.5})
-  })
+  triggerNote(key, instrument, 0.5)
 }
 
 function Key(props) {

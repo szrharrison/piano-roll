@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Tone from 'tone'
 import Soundfont from 'soundfont-player'
 
 import './App.css';
@@ -10,6 +11,7 @@ import { fetchSong, fetchSongs } from './api'
 import Timer from './api/Timer'
 import TracksHeader from './components/TracksHeader'
 import SongSelector from './components/SongSelector'
+import { sevenOctavePiano } from './concerns/keyboard'
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class App extends Component {
       time: 0,
       playing: false,
       paused: true,
-      track: 1
+      track: 1,
     }
 
     this.countDownTick = this.countDownTick.bind(this)
@@ -38,19 +40,21 @@ class App extends Component {
         })
     })
 
-    this.instrument = Soundfont.instrument(
-      this.ac,
-      'clarinet',
-      { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
-    )
+    this.instrument = 'clarinet'
+    // Soundfont.instrument(
+    //   this.ac,
+    //   'clarinet',
+    //   { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
+    // )
   }
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.track !== this.state.track ) {
-      this.instrument = Soundfont.instrument( this.ac,
-        this.tracks[nextState.track].instrument.name.replace(/ /g,"_").replace(/[()]/g,""),
-        { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
-      )
+      this.instrument = this.tracks[nextState.track].instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
+      // Soundfont.instrument( this.ac,
+      //   this.tracks[nextState.track].instrument.name.replace(/ /g,"_").replace(/[()]/g,""),
+      //   { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
+      // )
     }
     if (nextState.song.id !== this.state.song.id) {
       this.tracks = [...nextState.song.tracks].reduce( (acc, track) => {
@@ -102,24 +106,7 @@ class App extends Component {
     })
   }
 
-  replicateOctaveKeyPattern(keyPatternArray, numTimes) {
-    let arrays = Array.apply(null, new Array(numTimes))
-    arrays = this.flatten( arrays, keyPatternArray).slice(-128)
-    return arrays
-  }
-
-  flatten( arr, keyPattern ) {
-    let n = 0
-    return arr.reduce(function(acc, val) {
-      const addArr = keyPattern.map( key => `${key}${n}` )
-      n += 1
-      return addArr.concat( acc )
-    }, [])
-  }
-
-  oneOctaveKeyPattern = ['B', 'A#', 'A', 'G#', 'G', 'F#', 'F', 'E', 'D#', 'D', 'C#', 'C' ]
-  sevenOctavePiano = this.replicateOctaveKeyPattern(this.oneOctaveKeyPattern, 11)
-  ac = new AudioContext()
+  ac = Tone.context
 
   renderNotes(pitch) {
     if (this.state.song.title ) {
@@ -139,10 +126,10 @@ class App extends Component {
         <SongSelector songs={this.state.songs} onChange={this.handleSelectSong} />
         <TracksHeader track={this.state.track} tracks={this.state.song.tracks} onClick={this.handleSwitchTrack} />
         <div className="notes">
-          <PianoKeysSidebar sevenOctavePiano={this.sevenOctavePiano} instrument={this.instrument} />
+          <PianoKeysSidebar sevenOctavePiano={sevenOctavePiano} instrument={this.instrument} />
           <div className="note-slots">
             <div className="play-head" style={playheadStyle}>{this.props.currentTime}</div>
-            {this.sevenOctavePiano.map((pianoKey, i) => {
+            {sevenOctavePiano.map((pianoKey, i) => {
               return <NoteSlot key={i} dark={pianoKey.search('#') !== -1} width={this.state.song.duration}>
                 {this.renderNotes(i)}
               </NoteSlot>

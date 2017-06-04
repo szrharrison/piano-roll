@@ -4,11 +4,12 @@
   "private": true,
   "dependencies": {
     "midi-converter": "^0.1.5",
+    "midiconvert": "github:tonejs/MidiConvert",
     "react": "^15.5.4",
     "react-classset": "0.0.2",
     "react-dom": "^15.5.4",
-    "react-file-input": "^0.2.5",
-    "soundfont-player": "^0.10.5"
+    "soundfont-player": "^0.10.5",
+    "tone": "^0.10.0"
   },
   "devDependencies": {
     "react-scripts": "1.0.6"
