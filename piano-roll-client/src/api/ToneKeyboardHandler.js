@@ -14,7 +14,7 @@ function notePaths(instrument) {
 }
 
 export function getNotes(instrument) {
-  return notePaths(instrument).( path => new Tone.Buffer().load(path))
+  // return notePaths(instrument).( path => new Tone.Buffer().load(path))
 }
 
 const player = new Tone.Player({
