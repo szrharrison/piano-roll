@@ -8,7 +8,10 @@ function notePaths(instrument) {
     if( note.search('#') !== -1 ) {
       mp3Note = nextLetter(note[0]) + 'b' + note.substr(2);
     }
-    return Object.assign(acc, {[note]: `https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/${instrument}-mp3/${mp3Note}.mp3`})
+    return {
+      ...acc,
+      [note]: `https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/${instrument}-mp3/${mp3Note}.mp3`
+    }
   }, {})
   return paths
 }
@@ -22,8 +25,7 @@ const player = new Tone.Player({
   }).toMaster()
 
 export function triggerNote(noteName, instrument, duration){
-  console.log(noteName, instrument)
-  player.buffer.load(notePaths(instrument)[noteName], () => playerStart() )
+  player.buffer.load(notePaths(instrument)[noteName], () => playerStart(duration) )
 }
 
 function playerStart(duration) {

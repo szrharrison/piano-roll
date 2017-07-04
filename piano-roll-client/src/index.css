@@ -112,6 +112,7 @@ body {
 }
 #time-bar button {
   top: 66%;
+  width: 2.45em;
 }
 #time-bar button:first-of-type {
   top: 33%;

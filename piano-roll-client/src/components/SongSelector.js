@@ -1,11 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import MidiConvert from 'midiconvert'
+
+import { fetchSingleSong } from '../actions/fetchSongActions'
+import { fetchCreateSong } from '../actions/createSongActions'
 
 function SongSelector(props) {
 
-  function handleChange(event) {
-    const songID = event.target.value
-    props.onChange(songID)
+  const handleChange = e => {
+    const songID = e.target.value
+    props.fetchSingleSong(songID)
   }
 
   function handleAdd(event) {
@@ -16,7 +20,7 @@ function SongSelector(props) {
     reader.onloadend = () => {
       const base64 = reader.result.slice(reader.result.search(/,/) + 1)
       var jsonSong = MidiConvert.parse(atob(base64))
-      
+      props.createSong(JSON.parse(JSON.stringify(jsonSong)))
     }
 
     reader.readAsDataURL(file)
@@ -46,4 +50,17 @@ function SongSelector(props) {
   )
 }
 
-export default SongSelector
+function mapStateToProps(state) {
+  return {
+    songs: state.music.allIds
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchSingleSong: id => dispatch(fetchSingleSong(id)),
+    createSong: song => dispatch(fetchCreateSong(song))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SongSelector)

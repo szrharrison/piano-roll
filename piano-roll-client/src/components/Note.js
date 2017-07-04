@@ -1,29 +1,29 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { triggerNote } from '../api/ToneKeyboardHandler'
 
-class Note extends Component {
+const Note = props => {
+  if (props.shouldPlay) {
+    triggerNote(props.name, props.instrument, props.note.duration)
+  }
+  const noteStyle = {
+    left: `${Math.round(props.note.start_time * 200) + 4}px`,
+    width: `${Math.round(props.note.duration * 200)}px`
+  }
+  return (
+    <div className="note" style={noteStyle}>
+      <span>
+        {props.name}
+      </span>
+    </div>
+  )
+}
 
-  // shouldComponentUpdate(nextProps) {
-  //   return (nextProps.start_time - nextProps.currentTime) < 0.05 && (nextProps.start_time - nextProps.currentTime) > 0
-  // }
-
-  render() {
-    if ((this.props.start_time - this.props.currentTime) < 0.05 && (this.props.start_time - this.props.currentTime) > 0) {
-      this.props.instrument.then(instrument => {
-        instrument.play(this.props.pitch, this.props.instrument.currentTime, { duration: this.props.duration})
-      })
-    }
-    const noteStyle = {
-      left: `${Math.round(this.props.start_time * 200) + 4}px`,
-      width: `${Math.round(this.props.duration * 200)}px`
-    }
-    return (
-      <div className="note" style={noteStyle}>
-        <span>
-          {this.props.name}
-        </span>
-      </div>
-    )
+function mapStateToProps(state, ownProps) {
+  return {
+    instrument: state.music.instruments.name,
+    note: state.music.notesById[ownProps.noteId]
   }
 }
 
-export default Note
+export default connect(mapStateToProps)(Note)

@@ -1,5 +1,7 @@
 import React from 'react'
 import classSet from 'react-classset'
+import { connect } from 'react-redux'
+
 import { wideKeys } from '../concerns/keyboard'
 import {triggerNote} from '../api/ToneKeyboardHandler'
 
@@ -24,4 +26,6 @@ function Key(props) {
       </li>)
 }
 
-export default Key
+const mapStateToProps = state => ({instrument: state.music.instruments.name})
+
+export default connect(mapStateToProps)(Key)

@@ -5,14 +5,19 @@
   "dependencies": {
     "midi-converter": "^0.1.5",
     "midiconvert": "github:tonejs/MidiConvert",
+    "normalizr": "^3.2.3",
     "react": "^15.5.4",
     "react-classset": "0.0.2",
     "react-dom": "^15.5.4",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0",
     "soundfont-player": "^0.10.5",
     "tone": "^0.10.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.6"
+    "react-scripts": "1.0.6",
+    "redux-devtools-extension": "^2.13.2"
   },
   "scripts": {
     "start": "PORT=8080 react-scripts start",
