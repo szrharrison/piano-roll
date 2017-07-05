@@ -52,7 +52,7 @@ function SongSelector(props) {
 
 function mapStateToProps(state) {
   return {
-    songs: state.music.allIds
+    songs: state.music.allSongs
   }
 }
 

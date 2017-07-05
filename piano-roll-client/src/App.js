@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import Tone from 'tone'
-import Soundfont from 'soundfont-player'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import _ from 'lodash'
+import Perf from 'react-addons-perf'
 
 import { fetchAllSongs } from './actions/fetchSongsActions'
 
 import './App.css';
-import Note from './components/Note'
 import NoteSlot from './components/NoteSlot'
 import PianoKeysSidebar from './components/PianoKeysSidebar'
 import TimeBar from './components/TimeBar'
@@ -18,38 +17,9 @@ import { sevenOctavePiano } from './concerns/keyboard'
 class App extends Component {
   componentDidMount() {
     this.props.fetchAllSongs()
-
-    this.instrument = 'clarinet'
-    // Soundfont.instrument(
-    //   this.ac,
-    //   'clarinet',
-    //   { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
-    // )
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.tracks.id !== this.props.tracks.id ) {
-      this.instrument = nextProps.instruments.name
-      // Soundfont.instrument( this.ac,
-      //   this.tracks[nextState.track].instrument.name.replace(/ /g,"_").replace(/[()]/g,""),
-      //   { from: 'https://raw.githubusercontent.com/drumnation/pre-rendered-soundfont-libs-for-midi-js/master/Compifont_NEW/' }
-      // )
-    }
-  }
-
-  ac = Tone.context
-
-  renderNotes = (pitch, pianoKey) => {
-    if (this.props.song.title ) {
-      const notes = this.props.tracks.track.notes.map( note => {
-        return this.props.notesById[note]
-      })
-      let noteSlotNotes = notes.filter( note => note.pitch === 139 - pitch )
-      let noteComponents = noteSlotNotes.map( (note, i) => <Note key={`${i}-${note.name}`} name={pianoKey} noteId={note.id} />)
-
-      return noteComponents
-    }
-  }
+  perf = Perf
 
   render() {
     return (
@@ -61,9 +31,14 @@ class App extends Component {
           <div className="note-slots">
             <PlayHead/>
             {sevenOctavePiano.map((pianoKey, i) => {
-              return <NoteSlot key={i} dark={pianoKey.search('#') !== -1}>
-                {this.renderNotes(i, pianoKey)}
-              </NoteSlot>
+              return (
+                <NoteSlot
+                  key={_.uniqueId('note_slot_')}
+                  pianoKey={pianoKey}
+                  dark={pianoKey.search('#') !== -1}
+                  pitch={139 - i}
+                />
+              )
             })}
             <TimeBar/>
           </div>
@@ -75,10 +50,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    song: state.music.song,
-    tracks: state.music.tracks,
-    notesById: state.music.notesById,
-    instruments: state.music.instruments
+    song: state.music.song
   }
 }
 

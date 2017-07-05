@@ -1,7 +1,10 @@
 import React from 'react'
 import classSet from 'react-classset'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import _ from 'lodash'
+
+import makeGetNotesByPitch from '../selectors/noteSlotsSelectors'
+import Note from './Note'
 
 function NoteSlot(props) {
   const classes = classSet({
@@ -11,15 +14,28 @@ function NoteSlot(props) {
   })
   return (
     <div className={classes} style={{width: `${props.duration*200}px`}}>
-      {props.children}
+      {props.notes
+        ?
+          props.notes.map( (note, i) => (
+            <Note
+              key={_.uniqueId('note_')}
+              name={props.pianoKey}
+              noteId={note.id}
+            />
+          ))
+        :
+        null
+      }
     </div>
   )
 }
 
-NoteSlot.propTypes = {
-  dark: PropTypes.bool.isRequired
+const makeMapStateToProps = () => {
+  const getNotesByPitch = makeGetNotesByPitch()
+  return (state, ownProps) => ({
+    duration: state.music.song.duration,
+    notes: getNotesByPitch(state, ownProps)
+  })
 }
 
-const mapStateToProps = state => ({duration: state.music.song.duration})
-
-export default connect(mapStateToProps)(NoteSlot)
+export default connect(makeMapStateToProps)(NoteSlot)

@@ -2,26 +2,22 @@ import { createReducer } from './reducerUtilities'
 
 const initialState = {
   byId: {},
-  allIds: [],
-  track: {}
+  allIds: []
 }
 
 const receiveFetchSong = (state, action) => {
   let { tracks, song } = action.song
   const allIds = song.tracks
   const id = allIds[0]
-  const track = tracks[id]
   return {
     byId: tracks,
     allIds,
-    id,
-    track
+    id
   }
 }
 const setTrack = (state, action) => ({
   ...state,
-  id: action.trackId,
-  track: action.track
+  id: action.trackId
 })
 
 const tracks = createReducer(initialState, {

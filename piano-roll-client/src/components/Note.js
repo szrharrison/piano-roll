@@ -1,5 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+
+import makeGetShouldNotePlay, { getNote } from '../selectors/notesSelectors'
+import { getInstrumentName } from '../selectors'
 import { triggerNote } from '../api/ToneKeyboardHandler'
 
 const Note = props => {
@@ -19,11 +22,14 @@ const Note = props => {
   )
 }
 
-function mapStateToProps(state, ownProps) {
-  return {
-    instrument: state.music.instruments.name,
-    note: state.music.notesById[ownProps.noteId]
-  }
+function makeMapStateToProps() {
+  const getShouldNotePlay = makeGetShouldNotePlay()
+  const mapStateToProps = (state, ownProps) => ({
+    instrument: getInstrumentName(state),
+    note: getNote(state, ownProps),
+    shouldPlay: getShouldNotePlay(state, ownProps)
+  })
+  return mapStateToProps
 }
 
-export default connect(mapStateToProps)(Note)
+export default connect(makeMapStateToProps)(Note)

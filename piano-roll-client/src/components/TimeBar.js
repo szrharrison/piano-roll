@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import { passTime, togglePause, startTime, stopTime } from '../actions/timeActions'
 import Timer from '../api/Timer'
@@ -8,6 +8,7 @@ import Timer from '../api/Timer'
 import PlayOutlineCircle from '../icons/play-outline-circle.svg.js'
 import PauseOutlineCircle from '../icons/pause-outline-circle.svg.js'
 import StopOutlineCircle from '../icons/stop-outline-circle.svg.js'
+import TimerClock from './TimerClock'
 
 class TimeBar extends Component {
 
@@ -40,11 +41,17 @@ class TimeBar extends Component {
       style = {
         width: this.props.duration * 200
       }
-      dividers = Array.apply(null, new Array(Math.floor(this.props.duration))).map( (e,i) => <div className="second" key={i}></div> )
+      dividers = _.times(Math.floor(this.props.duration), () => (
+        <div
+          key={_.uniqueId('divider_')}
+          className="second"
+        >
+        </div>
+      ))
     }
     return (
       <div id="time-bar" style={style}>
-        <div className="time">{this.props.currentTime}</div>
+        <TimerClock />
         <button
           onClick={this.handlePressPlay}
         >
@@ -64,19 +71,9 @@ class TimeBar extends Component {
   }
 }
 
-TimeBar.propTypes = {
-  currentTime: PropTypes.number.isRequired,
-  duration: PropTypes.number,
-  paused: PropTypes.bool.isRequired,
-  playing: PropTypes.bool.isRequired,
-  stopped: PropTypes.bool.isRequired,
-}
-
-
 function mapStateToProps(state) {
   return {
     duration: state.music.song.duration,
-    currentTime: state.time.currentTime,
     paused: state.time.paused,
     playing: state.time.playing,
     stopped: !state.time.playing

@@ -12,7 +12,7 @@ function TracksHeader(props) {
         'active': props.tracks.id === trackId
       })
       const track = props.tracks.byId[trackId]
-      const instrument = props.instruments.byId[track.instrument]
+      const instrument = props.instrumentsById[track.instrument]
       return (
         <li key={`${track.name}-${i}-${track.instrument}`} onClick={ e => props.setTrack(track.id) }>
           <span className={classes}><img src={`https://raw.githubusercontent.com/andruo11/midi-pictures/master/${('000' + track.instrument).substr(-3)}.jpg`} alt={instrument.name} />{track.name}</span>
@@ -34,7 +34,7 @@ function TracksHeader(props) {
 function mapStateToProps(state) {
   return {
     tracks: state.music.tracks,
-    instruments: state.music.instruments
+    instrumentsById: state.music.instrumentsById
   }
 }
 

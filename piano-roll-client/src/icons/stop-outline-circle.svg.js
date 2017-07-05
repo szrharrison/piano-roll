@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 const StopOutlineCircle = props => {
   return (
@@ -9,4 +10,4 @@ const StopOutlineCircle = props => {
   )
 }
 
-export default StopOutlineCircle
+export default connect()(StopOutlineCircle)
