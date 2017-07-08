@@ -7,7 +7,7 @@ const initialState = {
   stopped: true
 }
 
-const passTime = (state, action) => ({...state, currentTime: action.time / 20})
+const passTime = (state, action) => ({...state, currentTime: action.time})
 const toggleBoolean = (state, action) => ({...state, [action.field]: !state[action.field]})
 const startTime = state => ({...state, playing: true, paused: false, stopped: false})
 const stopTime = state => ({...state, playing: false, paused: true, stopped: true, currentTime: 0})

@@ -1,4 +1,5 @@
 import Tone from 'tone'
+import _ from 'lodash'
 
 import { sevenOctavePiano } from '../concerns/keyboard'
 
@@ -16,21 +17,47 @@ function notePaths(instrument) {
   return paths
 }
 
-export function getNotes(instrument) {
-  // return notePaths(instrument).( path => new Tone.Buffer().load(path))
+class Player {
+  constructor() {
+    this.setInstrument('clarinet')
+    this.playerBuffers = new Tone.Buffers(notePaths('acoustic_grand_piano'))
+    this.multiPlayer = new Tone.MultiPlayer(this.playerBuffers).toMaster()
+    this.multiPlayer.fadeOut = 0.05
+  }
+
+  triggerKey = (noteName, duration) => {
+    this.multiPlayer.start(noteName, "+0.1", 0, duration)
+  }
+
+  addNote = note => {
+    this.players[note.name].sync().start(note.start_time, 0, note.duration)
+  }
+
+  setInstrument = (instrument) => {
+    if(this.instrument !== instrument) {
+      console.log(this.players)
+      this.instrument = instrument
+      const notePathsObject = notePaths(instrument)
+      this.players = _.mapValues(notePathsObject, notePath => new Tone.Player({
+          url: notePath,
+          retrigger: true
+        }).toMaster()
+      )
+    }
+  }
+
+  play = () => Tone.Transport.start()
+
+  pause = () => Tone.Transport.pause()
+
+  stop = () => Tone.Transport.stop()
+
+  setTimer = callback => Tone.Transport.scheduleRepeat(() => callback(Tone.Transport.seconds), 0.05)
 }
 
-const player = new Tone.Player({
-    retrigger : true
-  }).toMaster()
+const player = new Player()
 
-export function triggerNote(noteName, instrument, duration){
-  player.buffer.load(notePaths(instrument)[noteName], () => playerStart(duration) )
-}
-
-function playerStart(duration) {
-  player.start(0,0,duration)
-}
+export default player
 
 function nextLetter(s){
     return s.replace(/([a-zA-Z])[^a-zA-Z]*$/, function(a) {

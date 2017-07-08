@@ -11,7 +11,14 @@ class Api::V1::SongsController < Api::V1::ApplicationController
 
   def create
     song = song_params[:header]
-    this_song = Song.create_with(title: song[:name], bpm: song_params[:bpm].to_i, duration: song_params[:duration].to_f).find_or_create_by(title: song[:name])
+    binding.pry
+    this_song = Song.create_with(
+        title: song[:name],
+        bpm: song_params[:bpm].to_i,
+        duration: song_params[:duration].to_f,
+        ppq: song[:PPQ],
+        time_signature: song[:timeSignature]
+      ).find_or_create_by(title: song[:name])
     song_params[:tracks].each do |track|
       track_info = {
         start_time: track[:startTime].to_f,

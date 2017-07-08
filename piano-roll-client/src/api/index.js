@@ -15,5 +15,5 @@ export function createSong(songJson) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({song: songJson})
-  }).then( resp => resp.json() ``)
+  }).then( resp => resp.json() )
 }

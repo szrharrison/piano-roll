@@ -13,11 +13,11 @@ function PianoKeysSidebar(props) {
     />
   ))
   return (
-    <nav id="nav-piano">
+    <div id="nav-piano">
       <ul>
         {pianoOctave}
       </ul>
-    </nav>
+    </div>
   )
 }
 

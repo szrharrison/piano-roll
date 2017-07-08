@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import Perf from 'react-addons-perf'
 
 import { fetchAllSongs } from './actions/fetchSongsActions'
 
@@ -19,8 +18,6 @@ class App extends Component {
     this.props.fetchAllSongs()
   }
 
-  perf = Perf
-
   render() {
     return (
       <div className="App">
@@ -36,7 +33,7 @@ class App extends Component {
                   key={_.uniqueId('note_slot_')}
                   pianoKey={pianoKey}
                   dark={pianoKey.search('#') !== -1}
-                  pitch={139 - i}
+                  pitch={108 - i}
                 />
               )
             })}

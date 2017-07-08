@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import Player from '../api/ToneKeyboardHandler'
 
 const getNotes = state => state.music.notesById
 const getInstruments = state => state.music.instrumentsById
@@ -32,7 +33,8 @@ export const getInstrumentName = createSelector(
   [getInstrument],
   instrument => {
     if(instrument) {
-      return instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
+      const name = instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
+      return name
     }
     return 'clarinet'
   }

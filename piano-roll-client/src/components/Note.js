@@ -1,14 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import makeGetShouldNotePlay, { getNote } from '../selectors/notesSelectors'
-import { getInstrumentName } from '../selectors'
-import { triggerNote } from '../api/ToneKeyboardHandler'
+import makeGetNoteForPlayer from '../selectors/notesSelectors'
 
 const Note = props => {
-  if (props.shouldPlay) {
-    triggerNote(props.name, props.instrument, props.note.duration)
-  }
   const noteStyle = {
     left: `${Math.round(props.note.start_time * 200) + 4}px`,
     width: `${Math.round(props.note.duration * 200)}px`
@@ -22,14 +17,12 @@ const Note = props => {
   )
 }
 
-function makeMapStateToProps() {
-  const getShouldNotePlay = makeGetShouldNotePlay()
-  const mapStateToProps = (state, ownProps) => ({
-    instrument: getInstrumentName(state),
-    note: getNote(state, ownProps),
-    shouldPlay: getShouldNotePlay(state, ownProps)
+
+const makeMapStateToProps = () => {
+  const getNoteForPlayer = makeGetNoteForPlayer()
+  return (state, ownProps) => ({
+    note: getNoteForPlayer(state, ownProps)
   })
-  return mapStateToProps
 }
 
 export default connect(makeMapStateToProps)(Note)

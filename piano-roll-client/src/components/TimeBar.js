@@ -3,35 +3,37 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import { passTime, togglePause, startTime, stopTime } from '../actions/timeActions'
-import Timer from '../api/Timer'
 
 import PlayOutlineCircle from '../icons/play-outline-circle.svg.js'
 import PauseOutlineCircle from '../icons/pause-outline-circle.svg.js'
 import StopOutlineCircle from '../icons/stop-outline-circle.svg.js'
 import TimerClock from './TimerClock'
 
+import Player from '../api/ToneKeyboardHandler'
+
 class TimeBar extends Component {
+
+  componentDidMount() {
+    Player.setTimer(this.props.passTime)
+  }
 
   handlePressPlay = () => {
     if(this.props.stopped) {
       this.props.startTime()
-      this.timer = new Timer({duration: this.props.duration, callback: this.props.passTime})
-      this.timer.start()
+      Player.play()
     } else {
       if(this.props.paused) {
         this.props.togglePause()
-        this.timer.pauseResume()
+        Player.play()
       } else {
+        Player.pause()
         this.props.togglePause()
-        this.timer.pauseResume()
       }
     }
   }
 
   handlePressStop = () => {
-    if(!this.props.paused) {
-      this.timer.pauseResume()
-    }
+    Player.stop()
     this.props.stopTime()
   }
 

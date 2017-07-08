@@ -1,13 +1,18 @@
 import { createSelector } from 'reselect'
+import Player from '../api/ToneKeyboardHandler'
 
-export const getNote = (state, props) => state.music.notesById[props.noteId]
-const getTime = state => state.time.currentTime
-
-const makeGetShouldNotePlay = () => {
-  return createSelector(
-    [getNote, getTime],
-    (note, time) => ((note.start_time - time) < 0.05 && (note.start_time - time) >= 0)
-  )
+export const getNote = (state, props) => {
+  const note = state.music.notesById[props.noteId]
+  note.name = props.name
+  return note
 }
 
-export default makeGetShouldNotePlay
+const makeGetNoteForPlayer = () => createSelector(
+  [getNote],
+  note => {
+    Player.addNote(note)
+    return note
+  }
+)
+
+export default makeGetNoteForPlayer
