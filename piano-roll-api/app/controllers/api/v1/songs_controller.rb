@@ -11,7 +11,6 @@ class Api::V1::SongsController < Api::V1::ApplicationController
 
   def create
     song = song_params[:header]
-    binding.pry
     this_song = Song.create_with(
         title: song[:name],
         bpm: song_params[:bpm].to_i,

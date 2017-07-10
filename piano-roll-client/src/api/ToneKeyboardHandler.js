@@ -29,8 +29,14 @@ class Player {
     this.multiPlayer.start(noteName, "+0.1", 0, duration)
   }
 
-  addNote = note => {
-    this.players[note.name].sync().start(note.start_time, 0, note.duration)
+  addNote = async note => {
+    try {
+      let addedNote
+      addedNote = await this.players[note.name].sync().start(note.start_time, 0, note.duration)
+      return addedNote
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   setInstrument = (instrument) => {
