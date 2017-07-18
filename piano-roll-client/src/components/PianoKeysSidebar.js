@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 
 import Key from './Key'
 import { sevenOctavePiano } from '../concerns/keyboard'
@@ -21,4 +22,4 @@ function PianoKeysSidebar(props) {
   )
 }
 
-export default PianoKeysSidebar
+export default connect()(PianoKeysSidebar)

@@ -2,12 +2,12 @@ import React from 'react'
 import classSet from 'react-classset'
 import { connect } from 'react-redux'
 
-import { getInstrumentName } from '../selectors'
+// import { getInstrumentName } from '../selectors'
 import { wideKeys } from '../concerns/keyboard'
 import Player from '../api/ToneKeyboardHandler'
 
-const handleClick = (key) => {
-  Player.triggerKey(key, 0.5)
+const handleClick = key => {
+  Player.triggerKey(key)
 }
 
 function Key(props) {
@@ -27,6 +27,7 @@ function Key(props) {
       </li>)
 }
 
-const mapStateToProps = state => ({instrument: getInstrumentName(state)})
+// const mapStateToProps = state => ({instrument: getInstrumentName(state)})
 
-export default connect(mapStateToProps)(Key)
+// export default connect(mapStateToProps)(Key)
+export default connect()(Key)

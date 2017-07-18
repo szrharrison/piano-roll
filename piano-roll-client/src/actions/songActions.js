@@ -10,14 +10,16 @@ export function setTrack( trackId ) {
   }
 }
 
-export function playersLoading() {
+export function playersLoading(loadingBuffer) {
   return {
-    type: 'players.LOADING'
+    type: 'tone.LOADING',
+    loadingBuffer
   }
 }
 
-export function playersLoaded() {
+export function playersLoaded(loadedBuffer) {
   return {
-    type: 'players.FINISHED_LOADING'
+    type: 'tone.FINISHED_LOADING',
+    loadedBuffer
   }
 }

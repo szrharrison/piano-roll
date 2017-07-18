@@ -1,10 +1,14 @@
 import { createSelector } from 'reselect'
+import _ from 'lodash'
+
 import Player from '../api/ToneKeyboardHandler'
 
 const getNotes = state => state.music.notesById
 const getInstruments = state => state.music.instrumentsById
 const getTracks = state => state.music.tracks.byId
 const getTrackId = state => state.music.tracks.id
+const getToneBuffers = state => state.music.tone.buffers
+const getToneLoaded = state => state.music.tone.loaded
 
 const getTrack = createSelector(
   [getTracks, getTrackId],
@@ -38,4 +42,9 @@ export const getInstrumentName = createSelector(
     }
     return 'clarinet'
   }
+)
+
+export const getStillLoading = createSelector(
+  [getToneBuffers, getToneLoaded],
+  (buffers, loaded) => _.difference(buffers, loaded)
 )
