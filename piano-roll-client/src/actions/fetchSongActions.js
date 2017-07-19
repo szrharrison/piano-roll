@@ -1,7 +1,10 @@
 import _ from 'lodash'
-
-import { fetchSong } from '../api'
 import { normalize, schema } from 'normalizr';
+
+import { fetchSongRequest } from '../api'
+import * as actionTypes from '../constants'
+
+const { fetchSong, songTypes } = actionTypes
 
 // Define a users schema
 const noteEntity = new schema.Entity('notes')
@@ -25,7 +28,7 @@ export function fetchSingleSong( songId) {
   return function(dispatch) {
     dispatch(requestFetchSong())
 
-    fetchSong(songId)
+    fetchSongRequest(songId)
       .then( data => {
         if(data.error) {
           dispatch(receiveFetchSongError(data.error))
@@ -38,13 +41,13 @@ export function fetchSingleSong( songId) {
 
 function requestFetchSong() {
   return {
-    type: 'fetchSong.REQUEST_FETCH_SONG'
+    type: fetchSong.REQUEST_FETCH_SONG
   }
 }
 
 function receiveFetchSongError( error ) {
   return {
-    type: 'fetchSong.RECEIVE_FETCH_SONG_ERROR',
+    type: fetchSong.RECEIVE_FETCH_SONG_ERROR,
     status: 'error',
     receivedAt: Date.now(),
     error
@@ -57,7 +60,7 @@ function receiveFetchSong( originalSong ) {
   song.song = normalized.entities.songs[normalized.result]
   song = _.omit(song, 'songs')
   return {
-    type: 'song.RECEIVE_FETCH_SONG',
+    type: songTypes.RECEIVE_FETCH_SONG,
     status: 'success',
     receivedAt: Date.now(),
     song

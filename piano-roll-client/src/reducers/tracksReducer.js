@@ -1,4 +1,7 @@
 import { createReducer } from './reducerUtilities'
+import * as actionTypes from '../constants'
+
+const { songTypes, tracks } = actionTypes
 
 const initialState = {
   byId: {},
@@ -20,9 +23,9 @@ const setTrack = (state, action) => ({
   id: action.trackId
 })
 
-const tracks = createReducer(initialState, {
-    'song.RECEIVE_FETCH_SONG': receiveFetchSong,
-    'tracks.SET_TRACK': setTrack
+const tracksReducer = createReducer(initialState, {
+    [songTypes.RECEIVE_FETCH_SONG]: receiveFetchSong,
+    [tracks.SET_TRACK]: setTrack
 })
 
-export default tracks
+export default tracksReducer

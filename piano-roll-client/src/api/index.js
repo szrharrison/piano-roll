@@ -1,8 +1,8 @@
-export function fetchSongs() {
+export function fetchSongsRequest() {
   return fetch('http://localhost:3000/api/v1/songs')
     .then( resp => resp.json() )
 }
-export function fetchSong(songID) {
+export function fetchSongRequest(songID) {
   return fetch(`http://localhost:3000/api/v1/songs/${songID}`)
     .then( resp => resp.json() )
 }

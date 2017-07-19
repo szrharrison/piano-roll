@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect'
 import _ from 'lodash'
 
-import Player from '../api/ToneKeyboardHandler'
-
 const getNotes = state => state.music.notesById
 const getInstruments = state => state.music.instrumentsById
 const getTracks = state => state.music.tracks.byId

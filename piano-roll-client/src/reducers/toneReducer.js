@@ -1,4 +1,7 @@
 import { createReducer } from './reducerUtilities'
+import * as actionTypes from '../constants'
+
+const { tone } = actionTypes
 
 const initialState = {
   buffers: [],
@@ -20,9 +23,9 @@ const finishedLoading = (state, action) => ({
   ]
 })
 
-const tone = createReducer( initialState, {
-  'tone.LOADING': loading,
-  'tone.FINISHED_LOADING': finishedLoading
+const toneReducer = createReducer( initialState, {
+  [tone.LOADING]: loading,
+  [tone.FINISHED_LOADING]: finishedLoading
 })
 
-export default tone
+export default toneReducer

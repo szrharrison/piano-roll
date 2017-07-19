@@ -1,4 +1,7 @@
 import { createSong } from '../api'
+import * as actionTypes from '../constants'
+
+const { fetchSongs, songTypes } = actionTypes
 
 export function fetchCreateSong(song) {
   return function(dispatch) {
@@ -17,13 +20,13 @@ export function fetchCreateSong(song) {
 
 function requestCreateSong() {
   return {
-    type: 'fetchSongs.REQUEST_CREATE_SONG'
+    type: fetchSongs.REQUEST_CREATE_SONG
   }
 }
 
 function receiveCreateSongError( error ) {
   return {
-    type: 'fetchSongs.RECEIVE_CREATE_SONG_ERROR',
+    type: fetchSongs.RECEIVE_CREATE_SONG_ERROR,
     status: 'error',
     receivedAt: Date.now(),
     error
@@ -32,7 +35,7 @@ function receiveCreateSongError( error ) {
 
 function receiveCreateSong( song ) {
   return {
-    type: 'song.RECEIVE_CREATE_SONG',
+    type: songTypes.RECEIVE_CREATE_SONG,
     status: 'success',
     receivedAt: Date.now(),
     song

@@ -9,7 +9,7 @@ import { getInstrumentName } from '../selectors'
 import Player, { notePaths } from '../api/ToneKeyboardHandler'
 
 function TracksHeader(props) {
-  const { instrumentName: instrument, playersLoading, playersLoaded } = props
+  const { instrumentName, playersLoading, playersLoaded } = props
   let tracks
   const setLoadingNotes = (instrument, playersLoading, playersLoaded) => {
     const notes = _.keys(notePaths(instrument))
@@ -28,7 +28,7 @@ function TracksHeader(props) {
         <li
           key={`${track.name}-${i}-${track.instrument}`}
           onClick={ e => {
-            setLoadingNotes(instrument, playersLoading, playersLoaded)
+            setLoadingNotes(instrumentName, playersLoading, playersLoaded)
             props.setTrack(track.id)
           }}
         >

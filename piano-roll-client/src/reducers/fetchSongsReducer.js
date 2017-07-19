@@ -1,4 +1,7 @@
 import { createReducer } from './reducerUtilities'
+import * as actionTypes from '../constants'
+
+const { fetchSongs, songTypes } = actionTypes
 
 const initialState = {
   allSongs: [],
@@ -28,10 +31,10 @@ const receiveFetchSongs = (state, action) => {
   }
 }
 
-const fetchSongs = createReducer(initialState, {
-  'fetchSongs.REQUEST_FETCH_SONGS': requestFetchSongs,
-  'fetchSongs.RECEIVE_FETCH_SONGS_ERROR': receiveFetchSongsError,
-  'songs.RECEIVE_FETCH_SONGS': receiveFetchSongs
+const fetchSongsReducer = createReducer(initialState, {
+  [fetchSongs.REQUEST_FETCH_SONGS]: requestFetchSongs,
+  [fetchSongs.RECEIVE_FETCH_SONGS_ERROR]: receiveFetchSongsError,
+  [songTypes.RECEIVE_FETCH_SONGS]: receiveFetchSongs
 })
 
-export default fetchSongs
+export default fetchSongsReducer
