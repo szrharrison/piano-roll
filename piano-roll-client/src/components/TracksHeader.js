@@ -9,6 +9,7 @@ import { getInstrumentName } from '../selectors'
 import Player, { notePaths } from '../api/ToneKeyboardHandler'
 
 function TracksHeader(props) {
+  const { instrumentName: instrument, playersLoading, playersLoaded } = props
   let tracks
   const setLoadingNotes = (instrument, playersLoading, playersLoaded) => {
     const notes = _.keys(notePaths(instrument))
@@ -22,15 +23,22 @@ function TracksHeader(props) {
       })
       const track = props.tracks.byId[trackId]
       const instrument = props.instrumentsById[track.instrument]
+      const instrumentNumber = ('000' + track.instrument).substr(-3)
       return (
         <li
           key={`${track.name}-${i}-${track.instrument}`}
           onClick={ e => {
-            setLoadingNotes(props.instrumentName, props.playersLoading, props.playersLoaded)
+            setLoadingNotes(instrument, playersLoading, playersLoaded)
             props.setTrack(track.id)
           }}
         >
-          <span className={classes}><img src={`https://raw.githubusercontent.com/andruo11/midi-pictures/master/${('000' + track.instrument).substr(-3)}.jpg`} alt={instrument.name} />{track.name}</span>
+          <span className={classes}>
+            <img
+              src={`https://raw.githubusercontent.com/andruo11/midi-pictures/master/${instrumentNumber}.jpg`}
+              alt={instrument.name}
+            />
+            {track.name}
+          </span>
         </li>
       )
     })
@@ -55,12 +63,11 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    setTrack: trackId => dispatch(setTrack(trackId)),
-    playersLoading: instrumentNote => dispatch(playersLoading(instrumentNote)),
-    playersLoaded: instrumentNote => dispatch(playersLoaded(instrumentNote))
+export default connect(
+  mapStateToProps,
+  {
+    setTrack,
+    playersLoading,
+    playersLoaded
   }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TracksHeader)
+)(TracksHeader)

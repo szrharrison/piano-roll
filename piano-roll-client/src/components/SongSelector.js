@@ -63,11 +63,10 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchSingleSong: id => dispatch(fetchSingleSong(id)),
-    createSong: song => dispatch(fetchCreateSong(song))
+export default connect(
+  mapStateToProps,
+  {
+    fetchSingleSong,
+    createSong: fetchCreateSong
   }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SongSelector)
+)(SongSelector)

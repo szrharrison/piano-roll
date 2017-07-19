@@ -82,13 +82,12 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    passTime: currentTime => dispatch(passTime(currentTime)),
-    togglePause: () => dispatch(togglePause()),
-    startTime: () => dispatch(startTime()),
-    stopTime: () => dispatch(stopTime()),
+export default connect(
+  mapStateToProps,
+  {
+    passTime,
+    togglePause,
+    startTime,
+    stopTime
   }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TimeBar)
+)(TimeBar)

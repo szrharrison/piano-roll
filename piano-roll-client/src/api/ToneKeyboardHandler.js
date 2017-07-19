@@ -29,7 +29,7 @@ class Player {
     try {
       this.multiPlayer.start( `acoustic_grand_piano-${noteName}`, "+0.1", 0, 0.5 )
     }
-    catch(err) {}
+    catch(err) {} // in case the buffers haven't loaded yet
   }
 
   addNote = (note, instrument, isLoaded) => {
@@ -44,7 +44,15 @@ class Player {
   }
 
   setInstrument = (instrument, playersLoaded) => {
-    if( _.keys(this.multiPlayer.buffers._buffers).findIndex( key => key.includes(instrument) ) === -1 ) {
+    if(
+      /* if none if the buffers have the instrument name as a part of their key
+        Note: buffers look like this:
+        {
+          buffername: Promise       // Resolves as the file being loaded
+        }
+      */
+      _.keys(this.multiPlayer.buffers._buffers).findIndex( key => key.includes(instrument) ) === -1
+    ) {
       const paths = notePaths(instrument)
       _.forIn(paths, (url, instrumentNote) => {
         this.multiPlayer.add(instrumentNote, url, () => {

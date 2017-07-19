@@ -41,7 +41,7 @@ class App extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -51,10 +51,9 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchAllSongs: () => dispatch(fetchAllSongs())
+export default connect(
+  mapStateToProps,
+  {
+    fetchAllSongs
   }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+)(App)
