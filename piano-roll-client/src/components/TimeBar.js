@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-import { passTime, togglePause, startTime, stopTime } from '../actions/timeActions'
+import { passTime, pausePlay, startTime, stopTime } from '../actions/timeActions'
 
 import PlayOutlineCircle from '../icons/play-outline-circle.svg.js'
 import PauseOutlineCircle from '../icons/pause-outline-circle.svg.js'
@@ -22,12 +22,11 @@ class TimeBar extends Component {
       this.props.startTime()
       Player.play()
     } else {
+      this.props.pausePlay()
       if(this.props.paused) {
-        this.props.togglePause()
         Player.play()
       } else {
         Player.pause()
-        this.props.togglePause()
       }
     }
   }
@@ -43,13 +42,16 @@ class TimeBar extends Component {
       style = {
         width: this.props.duration * 200
       }
-      dividers = _.times(Math.floor(this.props.duration), () => (
-        <div
-          key={_.uniqueId('divider_')}
-          className="second"
-        >
-        </div>
-      ))
+      dividers = new Array(Math.floor(this.props.duration) - 1)
+      for(let i = 0, l = dividers.length; i < l; i++) {
+        dividers[i] = (
+          <div
+            key={_.uniqueId('divider_')}
+            className="second"
+          >
+          </div>
+        )
+      }
     }
     return (
       <div id="time-bar" style={style}>
@@ -82,13 +84,4 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    passTime: currentTime => dispatch(passTime(currentTime)),
-    togglePause: () => dispatch(togglePause()),
-    startTime: () => dispatch(startTime()),
-    stopTime: () => dispatch(stopTime()),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TimeBar)
+export default connect(mapStateToProps, {passTime, pausePlay, startTime, stopTime})(TimeBar)

@@ -5,9 +5,10 @@ export function passTime(currentTime) {
   }
 }
 
-export function togglePause() {
+export function pausePlay() {
+
   return {
-    type: 'time.TOGGLE_BOOLEAN',
+    type: 'time.PAUSE_PLAY',
     field: 'paused'
   }
 }

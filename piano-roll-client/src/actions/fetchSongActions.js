@@ -3,25 +3,22 @@ import _ from 'lodash'
 import { fetchSong } from '../api'
 import { normalize, schema } from 'normalizr';
 
-// Define a users schema
-const noteEntity = new schema.Entity('notes')
-
 const instrumentEntity = new schema.Entity('instruments', {}, {
   idAttribute: 'midi_instrument_number'
 })
 
-// Define your comments schema
+const noteEntity = new schema.Entity('notes')
+
 const trackEntity = new schema.Entity('tracks', {
   instrument: instrumentEntity,
   notes: [ noteEntity ]
 })
 
-// Define your article
 const songEntity = new schema.Entity('songs', {
   tracks: [ trackEntity ]
 })
 
-export function fetchSingleSong( songId) {
+export function fetchSingleSong(songId) {
   return function(dispatch) {
     dispatch(requestFetchSong())
 
@@ -42,7 +39,9 @@ function requestFetchSong() {
   }
 }
 
-function receiveFetchSongError( error ) {
+function receiveFetchSongError(error) {
+  console.error('Error fetching song at:' + Date.now())
+  console.error(error)
   return {
     type: 'fetchSong.RECEIVE_FETCH_SONG_ERROR',
     status: 'error',
@@ -56,6 +55,18 @@ function receiveFetchSong( originalSong ) {
   let song = normalized.entities
   song.song = normalized.entities.songs[normalized.result]
   song = _.omit(song, 'songs')
+
+  for(let track in song.tracks) {
+    const tr = song.tracks[track],
+          inst = song.instruments[tr.instrument].name,
+          l = tr.notes.length
+    for(let i = 0; i < l; i++) {
+      song.notes[tr.notes[i]] = {
+        ...song.notes[tr.notes[i]],
+        instrument: inst
+      }
+    }
+  }
   return {
     type: 'song.RECEIVE_FETCH_SONG',
     status: 'success',

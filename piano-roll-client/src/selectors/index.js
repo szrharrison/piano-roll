@@ -22,9 +22,14 @@ const getInstrument = createSelector(
 
 export const getTrackNotes = createSelector(
   [getNotes, getTrack],
-  (notes, track) => {
+  (allNotes, track) => {
     if(track) {
-      return track.notes.map( noteId => notes[noteId] )
+      const l = track.notes.length,
+            notes = new Array(l)
+      for(let i = 0; i < l; i++) {
+        notes[i] = allNotes[track.notes[i]]
+      }
+      return notes
     }
   }
 )
@@ -33,8 +38,7 @@ export const getInstrumentName = createSelector(
   [getInstrument],
   instrument => {
     if(instrument) {
-      const name = instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
-      return name
+      return instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
     }
     return 'clarinet'
   }

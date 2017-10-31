@@ -7,9 +7,16 @@ export const getPitch = (state, props) => props.pitch
 const makeGetNotesByPitch = () => {
   return createSelector(
     [getTrackNotes, getPitch],
-    (notes, pitch) => {
-      if(notes) {
-        return notes.filter( note => note.pitch === pitch )
+    (trackNotes, pitch) => {
+      if(trackNotes) {
+        const l = trackNotes.length,
+              notes = []
+        for(let i = 0; i < l; i++) {
+          if(trackNotes[i].pitch === pitch) {
+            notes[notes.length] = trackNotes[i]
+          }
+        }
+        return notes
       }
     }
   )

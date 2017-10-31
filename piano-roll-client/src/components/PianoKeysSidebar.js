@@ -1,24 +1,31 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import Key from './Key'
 import { sevenOctavePiano } from '../concerns/keyboard'
 
 function PianoKeysSidebar(props) {
-  const pianoOctave = sevenOctavePiano.map((pianoKey, i) => (
-    <Key
-      key={_.uniqueId('key_')}
-      name={pianoKey}
-      white={pianoKey.search('#') === -1}
-    />
-  ))
+  const l = sevenOctavePiano.length,
+        pianoOctaves = new Array(l)
+
+  for(let i = 0; i < l; i++) {
+    const pianoKey = sevenOctavePiano[i]
+    pianoOctaves[i] = (
+      <Key
+        key={_.uniqueId('key_')}
+        name={pianoKey}
+        white={pianoKey[1] !== '#'}
+      />
+    )
+  }
   return (
     <div id="nav-piano">
       <ul>
-        {pianoOctave}
+        {pianoOctaves}
       </ul>
     </div>
   )
 }
 
-export default PianoKeysSidebar
+export default connect()(PianoKeysSidebar)

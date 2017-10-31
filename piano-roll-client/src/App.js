@@ -19,6 +19,19 @@ class App extends Component {
   }
 
   render() {
+    const l = sevenOctavePiano.length,
+          noteSlots = new Array(l)
+    for(let i = 0; i < l; i++) {
+      const pianoKey = sevenOctavePiano[i]
+      noteSlots[i] = (
+        <NoteSlot
+          key={_.uniqueId('note_slot_')}
+          pianoKey={pianoKey}
+          dark={(pianoKey[1] === '#')}
+          pitch={108 - i}
+        />
+      )
+    }
     return (
       <div className="App">
         <SongSelector/>
@@ -27,16 +40,7 @@ class App extends Component {
           <PianoKeysSidebar/>
           <div className="note-slots">
             <PlayHead/>
-            {sevenOctavePiano.map((pianoKey, i) => {
-              return (
-                <NoteSlot
-                  key={_.uniqueId('note_slot_')}
-                  pianoKey={pianoKey}
-                  dark={pianoKey.search('#') !== -1}
-                  pitch={108 - i}
-                />
-              )
-            })}
+            {noteSlots}
             <TimeBar/>
           </div>
         </div>
@@ -51,10 +55,4 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchAllSongs: () => dispatch(fetchAllSongs())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, {fetchAllSongs})(App)
