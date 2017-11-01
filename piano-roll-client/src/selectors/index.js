@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect'
 import Player from '../api/ToneKeyboardHandler'
 
-const getNotes = state => state.music.notesById
-const getInstruments = state => state.music.instrumentsById
-const getTracks = state => state.music.tracks.byId
-const getTrackId = state => state.music.tracks.id
+export const getNotes = state => state.music.notesById
+export const getInstruments = state => state.music.instrumentsById
+export const getTracks = state => state.music.tracks.byId
+export const getTrackId = state => state.music.tracks.id
 
 const getTrack = createSelector(
   [getTracks, getTrackId],

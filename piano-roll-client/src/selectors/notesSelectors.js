@@ -7,7 +7,7 @@ export const getNote = (state, props) => {
   return note
 }
 
-const makeGetNoteForPlayer = () => createSelector(
+const getNoteForPlayer = createSelector(
   [getNote],
   note => {
     Player.addNote(note)
@@ -15,4 +15,4 @@ const makeGetNoteForPlayer = () => createSelector(
   }
 )
 
-export default makeGetNoteForPlayer
+export default getNoteForPlayer

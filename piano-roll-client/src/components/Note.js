@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import makeGetNoteForPlayer from '../selectors/notesSelectors'
+import getNoteForPlayer from '../selectors/notesSelectors'
 
 const Note = props => {
   const noteStyle = {
@@ -18,11 +18,6 @@ const Note = props => {
 }
 
 
-const makeMapStateToProps = () => {
-  const getNoteForPlayer = makeGetNoteForPlayer()
-  return (state, ownProps) => ({
-    note: getNoteForPlayer(state, ownProps)
-  })
-}
+const mapStateToProps = (state, ownProps) => ({note: getNoteForPlayer(state, ownProps)})
 
-export default connect(makeMapStateToProps)(Note)
+export default connect(mapStateToProps)(Note)

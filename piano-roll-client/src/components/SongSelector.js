@@ -53,21 +53,10 @@ class SongSelector extends Component {
             onChange={this.handleAdd} />
         </form>
       </div>
-      )
+    )
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    songs: state.music.allSongs
-  }
-}
+const mapStateToProps = state => ({songs: state.music.allSongs})
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchSingleSong: id => dispatch(fetchSingleSong(id)),
-    createSong: song => dispatch(fetchCreateSong(song))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SongSelector)
+export default connect(mapStateToProps, {fetchSingleSong, fetchCreateSong})(SongSelector)

@@ -5,7 +5,6 @@ import fetchSong from './fetchSongReducer'
 import tracks from './tracksReducer'
 import notesById from './notesReducer'
 import instrumentsById from './instrumentsReducer'
-import players from './playersReducers'
 
 const receiveFetchSongs = (state, action) => action.songs
 const receiveFetchSong = (state, action) => ({...action.song.song})
@@ -18,4 +17,4 @@ const allSongs = createReducer( [], {
   'song.RECEIVE_FETCH_SONGS': receiveFetchSongs
 })
 
-export default combineReducers({ song, allSongs, tracks, notesById, instrumentsById, fetchSongs, fetchSong, players })
+export default combineReducers({ song, allSongs, tracks, notesById, instrumentsById, fetchSongs, fetchSong })

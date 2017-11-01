@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import { fetchAllSongs } from './actions/fetchSongsActions'
+import { getSongForPlayer } from './selectors/songSelectors'
 
 import './App.css';
 import NoteSlot from './components/NoteSlot'
@@ -49,10 +50,6 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    song: state.music.song
-  }
-}
+const mapStateToProps = state => ({song: getSongForPlayer(state)})
 
 export default connect(mapStateToProps, {fetchAllSongs})(App)
