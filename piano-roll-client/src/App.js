@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import { fetchAllSongs } from './actions/fetchSongsActions'
-import { getSongForPlayer } from './selectors/songSelectors'
 
 import './App.css';
 import NoteSlot from './components/NoteSlot'
@@ -23,12 +22,11 @@ class App extends Component {
     const l = sevenOctavePiano.length,
           noteSlots = new Array(l)
     for(let i = 0; i < l; i++) {
-      const pianoKey = sevenOctavePiano[i]
       noteSlots[i] = (
         <NoteSlot
           key={_.uniqueId('note_slot_')}
-          pianoKey={pianoKey}
-          dark={(pianoKey[1] === '#')}
+          pianoKey={sevenOctavePiano[i]}
+          dark={(sevenOctavePiano[i][1] === '#')}
           pitch={108 - i}
         />
       )
@@ -46,10 +44,10 @@ class App extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-const mapStateToProps = state => ({song: getSongForPlayer(state)})
+function mapStateToProps(state) {return {song: state.music.song}}
 
 export default connect(mapStateToProps, {fetchAllSongs})(App)

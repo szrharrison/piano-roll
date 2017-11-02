@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import getNoteForPlayer from '../selectors/notesSelectors'
+import { getNote } from '../selectors/notesSelectors'
 
 const Note = props => {
   const noteStyle = {
-    left: `${Math.round(props.note.start_time * 200) + 4}px`,
+    left: `${Math.round(props.note.time * 200) + 4}px`,
     width: `${Math.round(props.note.duration * 200)}px`
   }
   return (
@@ -18,6 +18,6 @@ const Note = props => {
 }
 
 
-const mapStateToProps = (state, ownProps) => ({note: getNoteForPlayer(state, ownProps)})
+const mapStateToProps = (state, ownProps) => ({note: getNote(state, ownProps)})
 
 export default connect(mapStateToProps)(Note)

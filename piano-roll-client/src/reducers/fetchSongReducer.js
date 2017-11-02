@@ -24,10 +24,9 @@ const receiveFetchSong = (state, action) => {
   }
 }
 
-const fetchSong = createReducer(initialState, {
-  'fetchSong.REQUEST_FETCH_SONG': requestFetchSong,
-  'fetchSong.RECEIVE_FETCH_SONG_ERROR': receiveFetchSongError,
-  'song.RECEIVE_FETCH_SONG':receiveFetchSong
-})
+const handlers = new Map()
+handlers.set('fetchSong.REQUEST_FETCH_SONG', requestFetchSong)
+        .set('fetchSong.RECEIVE_FETCH_SONG_ERROR', receiveFetchSongError)
+        .set('song.RECEIVE_FETCH_SONG', receiveFetchSong)
 
-export default fetchSong
+export default createReducer(initialState, handlers)

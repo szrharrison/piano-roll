@@ -1,10 +1,15 @@
 import { createSelector } from 'reselect'
-import Player from '../api/ToneKeyboardHandler'
 
 export const getNotes = state => state.music.notesById
 export const getInstruments = state => state.music.instrumentsById
 export const getTracks = state => state.music.tracks.byId
 export const getTrackId = state => state.music.tracks.id
+export const getTime = state => state.time.currentTime
+
+export const getCurrentTime = createSelector(
+  [getTime],
+  time => +(time.toFixed(2))
+)
 
 const getTrack = createSelector(
   [getTracks, getTrackId],
@@ -38,7 +43,7 @@ export const getInstrumentName = createSelector(
   [getInstrument],
   instrument => {
     if(instrument) {
-      return instrument.name.replace(/ /g,"_").replace(/[()]/g,"")
+      return instrument.name.replace(/ /g,'_').replace(/[()]/g,'')
     }
     return 'clarinet'
   }

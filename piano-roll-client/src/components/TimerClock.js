@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { getCurrentTime } from '../selectors'
+
 const TimerClock = props => (
   <div className="time">
     {props.currentTime}
@@ -9,7 +11,7 @@ const TimerClock = props => (
 
 function mapStateToProps(state) {
   return {
-    currentTime: state.time.currentTime
+    currentTime: getCurrentTime(state)
   }
 }
 

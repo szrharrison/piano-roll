@@ -9,12 +9,14 @@ import instrumentsById from './instrumentsReducer'
 const receiveFetchSongs = (state, action) => action.songs
 const receiveFetchSong = (state, action) => ({...action.song.song})
 
-const song = createReducer( {}, {
-    'song.RECEIVE_FETCH_SONG': receiveFetchSong
-})
+const songHandlers = new Map(),
+      allSongsHandlers = new Map()
+songHandlers.set('song.RECEIVE_FETCH_SONG', receiveFetchSong)
 
-const allSongs = createReducer( [], {
-  'song.RECEIVE_FETCH_SONGS': receiveFetchSongs
-})
+allSongsHandlers.set('song.RECEIVE_FETCH_SONGS', receiveFetchSongs)
+
+const song = createReducer({}, songHandlers)
+
+const allSongs = createReducer([], allSongsHandlers)
 
 export default combineReducers({ song, allSongs, tracks, notesById, instrumentsById, fetchSongs, fetchSong })

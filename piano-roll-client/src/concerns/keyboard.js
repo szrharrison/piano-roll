@@ -1,13 +1,10 @@
 function replicateOctaveKeyPattern(keyPatternArray, numTimes) {
-  const resp = []
+  const resp = new Array(keyPatternArray.length * numTimes)
   for(let i = numTimes; i > 0; i--) {
     for(let n = 0, l = keyPatternArray.length; n < l; n++) {
-      const key = keyPatternArray[n]
-        resp[resp.length] = key + i
+        resp[(numTimes - i) * l + n] = keyPatternArray[n] + i
     }
   }
-  // let arrays = _.reverse(_.times(numTimes, i => keyPatternArray.map( key => key+i)))
-  // arrays = _.flatten(arrays).slice(11, -9)
   return resp
 }
 

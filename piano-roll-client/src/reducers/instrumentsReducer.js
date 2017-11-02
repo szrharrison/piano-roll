@@ -5,6 +5,7 @@ const receiveFetchSong = (state, action) => {
   return instruments
 }
 
-const instruments = createReducer({}, {'song.RECEIVE_FETCH_SONG': receiveFetchSong})
+const handlers = new Map()
+handlers.set('song.RECEIVE_FETCH_SONG', receiveFetchSong)
 
-export default instruments
+export default createReducer({}, handlers)

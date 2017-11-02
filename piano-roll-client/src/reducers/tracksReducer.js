@@ -20,9 +20,8 @@ const setTrack = (state, action) => ({
   id: action.trackId
 })
 
-const tracks = createReducer(initialState, {
-    'song.RECEIVE_FETCH_SONG': receiveFetchSong,
-    'tracks.SET_TRACK': setTrack
-})
+const handlers = new Map()
+handlers.set('song.RECEIVE_FETCH_SONG', receiveFetchSong)
+        .set('tracks.SET_TRACK', setTrack)
 
-export default tracks
+export default createReducer(initialState, handlers)

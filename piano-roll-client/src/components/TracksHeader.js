@@ -3,19 +3,22 @@ import { connect } from 'react-redux'
 
 import Track from './Track'
 
+import getTracksForPlayer from '../selectors/tracksSelectors'
+
 function TracksHeader(props) {
   let tracks
-  if(props.tracks.allIds) {
-    tracks = props.tracks.allIds.map( trackId => {
-      const track = props.tracks.byId[trackId]
-      return (
+  if(props.tracks) {
+    tracks = []
+    for(let trackId in props.tracks) {
+      const track = props.tracks[trackId]
+      tracks[tracks.length] = (
         <Track
           key={`${track.name}-${track.id}-${track.instrument}`}
           track={track}
           instrument={props.instrumentsById[track.instrument]}
         />
       )
-    })
+    }
   } else {
     tracks = null
   }
@@ -30,7 +33,7 @@ function TracksHeader(props) {
 
 function mapStateToProps(state) {
   return {
-    tracks: state.music.tracks,
+    tracks: getTracksForPlayer(state),
     instrumentsById: state.music.instrumentsById
   }
 }

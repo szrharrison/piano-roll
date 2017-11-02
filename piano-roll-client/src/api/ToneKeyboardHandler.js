@@ -1,4 +1,3 @@
-// TODO: Find a way to create players using existing Tone.Buffers (need to wait until after the've loaded)
 import Tone from 'tone'
 
 import { sevenOctavePiano } from '../concerns/keyboard'
@@ -34,7 +33,7 @@ function Player() {
    *                        instrument to the urls needed to load their buffers.
    * @private
    */
-  this.notePaths = function(instrument) {
+  this.notePaths = function notePaths(instrument) {
     const paths = {},
           l = sevenOctavePiano.length
 
@@ -65,7 +64,7 @@ function Player() {
    * @return    {Tone.Buffer}       The buffer created for that pitch.
    * @private
    */
-  this.addBuffer = function(instrument, note, url, callback = Tone.noOp) {
+  this.addBuffer = function addBuffer(instrument, note, url, callback = Tone.noOp) {
         if(!this.buffers.has(instrument)) {
           this.buffers.set(instrument, new Tone.Buffers())
         }
@@ -96,7 +95,7 @@ function Player() {
    * @private
    */
   this.addBuffers =
-      function(instrument,
+    function addBuffers(instrument,
                notePathsObject = this.notePaths(instrument),
                callback = Tone.noOp) {
         if(!this.buffers.has(instrument)) {
@@ -124,6 +123,12 @@ function Player() {
    */
   this.multiPlayer = new Tone.MultiPlayer(this.buffers.get('acoustic_grand_piano')).toMaster()
   this.multiPlayer.fadeOut = 0.05
+
+  /**
+   * All of the tracks available to the player
+   * @const {Map} tracks
+   */
+  this.tracks = new Map()
 }
 
 /**
@@ -133,44 +138,40 @@ function Player() {
  * @param {(string|number)} duration  The duration in seconds for the note to be played.
  * @public
  */
-Player.prototype.triggerKey = function(noteName, duration) {
+Player.prototype.triggerKey = function triggerKey(noteName, duration) {
   this.multiPlayer.start(noteName, "+0.1", 0, duration)
 }
 
-Player.prototype.addNote = function(note) {
-  console.log('addNote was run:')
-  console.log('instrument buffers before:', this.buffers.get(note.instrument))
-  console.log('note buffer before:', this.buffers.get(note.instrument).get(note.name))
-  this.buffers.get(note.instrument).get(note.name)._xhr.onload = () => {
-    console.log('note buffer after:', this.buffers.get(note.instrument).get(note.name))
-    let notePlayer = this.instruments.get(note.instrument)[note.name]
-    console.log(notePlayer)
-    if(notePlayer.loaded) {
-      notePlayer.start(note.start_time, 0, note.duration)
+Player.prototype.addTrack = function addTrack(track, notes) {
+  if(!this.tracks.has(track.name)) {
+    if(notes.length) {
+      this.addInstrument(notes[0].instrument)
     }
+    this.tracks.set(track.name, new Tone.Part(function(time, note) {
+      this.instruments.get(note.instrument).start(note.name, time, 0, note.duration)
+    }, notes))
   }
 }
 
+// Player.prototype.addNote = function(note, part) {
+//   console.log('addNote was run:')
+//   console.log('instrument buffers before:', this.buffers.get(note.instrument))
+//   console.log('note buffer before:', this.buffers.get(note.instrument).get(note.name))
+//   console.log('note:', note)
+//
+//   let notePlayer = this.instruments.get(note.instrument)[note.name](note)
+//   console.log(notePlayer)
+//   if(notePlayer.loaded) {
+//     notePlayer.start(note.start_time, 0, note.duration)
+//   }
+// }
+
 Player.prototype.addInstrument = function(instrument) {
   if(!this.instruments.has(instrument)) {
-    const notePathsObject = this.notePaths(instrument),
-          noteCreator = notePathsObject,
-          buffers = this.buffers.get(instrument)
-    let noteName
-
-    for(noteName in noteCreator) {
-      this.addBuffer(instrument, noteName, notePathsObject[noteName], () => { // eslint-disable-line no-loop-func
-        noteCreator[noteName] = function(note) {
-          new Tone.Player({
-            url: buffers.get(noteName),
-            retrigger: true
-          }).toMaster().sync()
-        }
-      })
-    }
-    this.instruments.set(instrument, noteCreator)
+    const buffers = this.addBuffers(instrument),
+          instrumentPlayer = new Tone.MultiPlayer(buffers).toMaster()
+    this.instruments.set(instrument, instrumentPlayer)
   }
-  console.log(this.instruments)
 }
 
 Player.prototype.play = function() {
@@ -186,12 +187,11 @@ Player.prototype.stop = function() {
 }
 
 Player.prototype.setTimer = function(callback) {
+  function setTimerCallback(){callback(Tone.Transport.seconds)}
   Tone.Transport.scheduleRepeat(
-    () => callback(Tone.Transport.seconds),
+    setTimerCallback,
     0.05
   )
 }
 
-const player = new Player()
-
-export default player
+export default new Player()

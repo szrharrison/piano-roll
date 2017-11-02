@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import { fetchSong } from '../api'
 import { normalize, schema } from 'normalizr';
 
@@ -54,17 +52,15 @@ function receiveFetchSong( originalSong ) {
   const normalized = normalize(originalSong, songEntity)
   let song = normalized.entities
   song.song = normalized.entities.songs[normalized.result]
-  song = _.omit(song, 'songs')
+  delete song.songs
 
   for(let track in song.tracks) {
-    const tr = song.tracks[track],
-          inst = song.instruments[tr.instrument].name,
-          l = tr.notes.length
+    const inst = song.instruments[song.tracks[track].instrument].name.replace(/ /g,'_').replace(/[()]/g,''),
+          l = song.tracks[track].notes.length
     for(let i = 0; i < l; i++) {
-      song.notes[tr.notes[i]] = {
-        ...song.notes[tr.notes[i]],
-        instrument: inst
-      }
+      song.notes[song.tracks[track].notes[i]].time = song.notes[song.tracks[track].notes[i]].start_time
+      song.notes[song.tracks[track].notes[i]].instrument = inst
+      delete song.notes[song.tracks[track].notes[i]].start_time
     }
   }
   return {
