@@ -1,7 +1,8 @@
+// @flow
 import { createSong } from '../api'
 
-export function fetchCreateSong(song) {
-  return function(dispatch) {
+export function fetchCreateSong(song: {}) {
+  return function(dispatch: Function) {
     dispatch(requestCreateSong())
 
     createSong(song)

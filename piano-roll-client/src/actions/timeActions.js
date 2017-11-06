@@ -1,4 +1,5 @@
-export function passTime(currentTime) {
+// @flow
+export function passTime(currentTime: number) {
   return {
     type: 'time.PASS_TIME',
     time: currentTime
@@ -6,7 +7,6 @@ export function passTime(currentTime) {
 }
 
 export function pausePlay() {
-
   return {
     type: 'time.PAUSE_PLAY',
     field: 'paused'

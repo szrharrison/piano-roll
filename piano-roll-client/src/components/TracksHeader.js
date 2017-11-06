@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import { connect } from 'react-redux'
 
@@ -5,7 +6,18 @@ import Track from './Track'
 
 import getTracksForPlayer from '../selectors/tracksSelectors'
 
-function TracksHeader(props) {
+function TracksHeader(
+  props: {
+    tracks: {
+      name: string,
+      id: number,
+      instrument: number
+    },
+    instrumentsById: {
+      name: string
+    }
+  }
+) {
   let tracks
   if(props.tracks) {
     tracks = []

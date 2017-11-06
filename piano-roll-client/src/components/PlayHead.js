@@ -1,8 +1,9 @@
+// @flow
 import React from 'react'
 import { connect } from 'react-redux'
 
-const PlayHead = props => {
-  const playheadStyle = {width: props.currentTime * 200}
+function PlayHead(props: {currentTime: number}) {
+  const playheadStyle = {transform: 'scaleX(' + props.currentTime * 200 + ')'}
   return (
     <div className="play-head" style={playheadStyle}>{props.currentTime}</div>
   )

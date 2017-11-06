@@ -1,16 +1,16 @@
+// @flow
 import React from 'react'
 import classSet from 'react-classset'
 import { connect } from 'react-redux'
 
-import { getInstrumentName } from '../selectors'
 import { wideKeys } from '../concerns/keyboard'
 import Player from '../api/ToneKeyboardHandler'
 
-const handleClick = (key) => {
+const handleClick = (key: string) => {
   Player.triggerKey(key, 0.5)
 }
 
-function Key(props) {
+function Key(props: {white: boolean, name: string}) {
   const classes = classSet({
     'black-tut': !props.white,
     'wide': wideKeys.find( key => props.name.search( key ) !== -1 )
@@ -27,6 +27,4 @@ function Key(props) {
       </li>)
 }
 
-const mapStateToProps = state => ({instrument: getInstrumentName(state)})
-
-export default connect(mapStateToProps)(Key)
+export default connect()(Key)

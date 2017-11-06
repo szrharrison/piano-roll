@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+// @flow
+import * as React from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
@@ -11,7 +12,17 @@ import TimerClock from './TimerClock'
 
 import Player from '../api/ToneKeyboardHandler'
 
-class TimeBar extends Component {
+type Props = {
+  passTime: Function,
+  startTime: Function,
+  pausePlay: Function,
+  stopTime: Function,
+  duration: number,
+  paused: boolean,
+  stopped: boolean
+}
+
+class TimeBar extends React.Component<Props> {
 
   componentDidMount() {
     Player.setTimer(this.props.passTime)
@@ -43,15 +54,13 @@ class TimeBar extends Component {
         width: this.props.duration * 200
       }
       dividers = new Array(Math.floor(this.props.duration) - 1)
-      for(let i = 0, l = dividers.length; i < l; i++) {
-        dividers[i] = (
-          <div
-            key={_.uniqueId('divider_')}
-            className="second"
-          >
-          </div>
-        )
-      }
+      dividers.map( () => (
+        <div
+          key={_.uniqueId('divider_')}
+          className="second"
+        >
+        </div>
+      ))
     }
     return (
       <div id="time-bar" style={style}>
@@ -79,7 +88,6 @@ function mapStateToProps(state) {
   return {
     duration: state.music.song.duration,
     paused: state.time.paused,
-    playing: state.time.playing,
     stopped: !state.time.playing
   }
 }

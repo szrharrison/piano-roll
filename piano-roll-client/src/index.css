@@ -77,6 +77,8 @@ body {
 .note-slot {
     box-shadow: inset 0 0 10px;
     z-index: -1;
+    background-color: #888;
+    height: calc(var(--note-slot-width) + 1px);
 }
 .note-slots {
   position: relative;
@@ -86,16 +88,12 @@ body {
   overflow-x: scroll;
   width: calc(100% - var(--piano-keys-width) - 16px);
 }
-.dark {
+.note-slot.dark {
   background-color: #666;
   height: var(--note-slot-width);
 }
 .dark .note {
   background-color: rgb(103, 148, 103);
-}
-.light {
-  background-color: #888;
-  height: calc(var(--note-slot-width) + 1px);
 }
 
 #time-bar {
@@ -131,6 +129,7 @@ body {
   border-right: 2px solid rgb(255,0,0);
   background-color: rgba(0,0,0,0);
   position: absolute;
+  width: 1px;
   left: 0;
   top: 0;
   z-index: 3;

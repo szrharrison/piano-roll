@@ -1,4 +1,7 @@
-export const setTrack = trackId => ({
-  type: 'tracks.SET_TRACK',
-  trackId
-})
+// @flow
+export function setTrack(trackId: number) {
+  return {
+    type: 'tracks.SET_TRACK',
+    trackId
+  }
+}

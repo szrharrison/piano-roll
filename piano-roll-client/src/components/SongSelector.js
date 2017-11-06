@@ -1,11 +1,22 @@
-import React, { Component } from 'react'
+// @flow
+import * as React from 'react'
 import { connect } from 'react-redux'
 import MidiConvert from 'midiconvert'
 
 import { fetchSingleSong } from '../actions/fetchSongActions'
 import { fetchCreateSong } from '../actions/createSongActions'
 
-class SongSelector extends Component {
+type Props = {
+  fetchSingleSong: Function,
+  createSong: Function,
+  songs: {id: number, title: string}[]
+}
+
+type State = {
+  selected: 'default' | number
+}
+
+class SongSelector extends React.Component<Props, State> {
   state = {
     selected: 'default'
   }
@@ -24,7 +35,9 @@ class SongSelector extends Component {
 
 
     reader.onloadend = () => {
+      // $FlowFixMe
       const base64 = reader.result.slice(reader.result.search(/,/) + 1)
+      // $FlowFixMe
       var jsonSong = MidiConvert.parse(atob(base64))
       this.props.createSong(JSON.parse(JSON.stringify(jsonSong)))
     }

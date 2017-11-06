@@ -1,10 +1,24 @@
+// @flow
 import React from 'react'
 import classSet from 'react-classset'
 import { connect } from 'react-redux'
 
 import { setTrack } from '../actions/trackActions'
 
-function Track(props) {
+function Track(
+  props: {
+    setTrack: Function,
+    track: {
+      name: string,
+      id: number,
+      instrument: number
+    },
+    instrument: {
+      name: string
+    },
+    selectedId: number
+  }
+) {
   const {track, instrument} = props,
         classes = classSet({
           'active': track.id === props.selectedId

@@ -1,14 +1,14 @@
 export function fetchSongs() {
-  return fetch('http://localhost:3000/api/v1/songs')
+  return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/songs`)
     .then( resp => resp.json() )
 }
 export function fetchSong(songID) {
-  return fetch(`http://localhost:3000/api/v1/songs/${songID}`)
+  return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/songs/${songID}`)
     .then( resp => resp.json() )
 }
 export function createSong(songJson) {
   console.log(songJson)
-  return fetch('http://localhost:3000/api/v1/songs', {
+  return fetch(`${process.env.REACT_APP_API_HOST}/api/v1/songs`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

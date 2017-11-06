@@ -1,3 +1,4 @@
+// @flow
 function replicateOctaveKeyPattern(keyPatternArray, numTimes) {
   const resp = new Array(keyPatternArray.length * numTimes)
   for(let i = numTimes; i > 0; i--) {

@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
@@ -13,24 +14,26 @@ import SongSelector from './components/SongSelector'
 import PlayHead from './components/PlayHead'
 import { sevenOctavePiano } from './concerns/keyboard'
 
-class App extends Component {
+type Props = {
+  fetchAllSongs: Function,
+
+}
+
+class App extends Component<Props> {
   componentDidMount() {
     this.props.fetchAllSongs()
   }
 
   render() {
-    const l = sevenOctavePiano.length,
-          noteSlots = new Array(l)
-    for(let i = 0; i < l; i++) {
-      noteSlots[i] = (
+    const noteSlots = sevenOctavePiano.map( (pianoKey, i) => (
         <NoteSlot
           key={_.uniqueId('note_slot_')}
-          pianoKey={sevenOctavePiano[i]}
-          dark={(sevenOctavePiano[i][1] === '#')}
+          pianoKey={pianoKey}
+          dark={(pianoKey[1] === '#')}
           pitch={108 - i}
         />
       )
-    }
+    )
     return (
       <div className="App">
         <SongSelector/>
@@ -48,6 +51,6 @@ class App extends Component {
   }
 }
 
-function mapStateToProps(state) {return {song: state.music.song}}
+const mapStateToProps = state => ({song: state.music.song})
 
 export default connect(mapStateToProps, {fetchAllSongs})(App)

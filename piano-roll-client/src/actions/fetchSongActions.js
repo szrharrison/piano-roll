@@ -1,3 +1,4 @@
+// @flow
 import { fetchSong } from '../api'
 import { normalize, schema } from 'normalizr';
 
@@ -16,8 +17,8 @@ const songEntity = new schema.Entity('songs', {
   tracks: [ trackEntity ]
 })
 
-export function fetchSingleSong(songId) {
-  return function(dispatch) {
+export function fetchSingleSong(songId: number) {
+  return function(dispatch: Function) {
     dispatch(requestFetchSong())
 
     fetchSong(songId)

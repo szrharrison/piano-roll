@@ -1,12 +1,27 @@
+// @flow
 import Tone from 'tone'
 
 import { sevenOctavePiano } from '../concerns/keyboard'
+
+declare class Player {
+  triggerKey: (string, number) => void,
+  addTrack: ({name: string}, {
+    instrument: string,
+    name: string,
+    duration: number
+  }[]) => void,
+  addInstrument: (string) => void,
+  play: () => void,
+  pause: () => void,
+  stop: () => void,
+  setTimer: (Function) => void
+}
 
 /**
  * @classdesc Player singleton.
  * @constructor
  */
-function Player() {
+function Player() { // eslint-disable-line
   /**
    * Converts letters to the next higher letter or cycles when the letter is
    * 'G'
@@ -15,7 +30,7 @@ function Player() {
    * @return  {string}          The next letter
    * @private
    */
-  function nextLetter(s){
+  function nextLetter(s: string): string{
     let c = s.charCodeAt(0)
     if(c === 71) {
       return 'A'
@@ -33,13 +48,13 @@ function Player() {
    *                        instrument to the urls needed to load their buffers.
    * @private
    */
-  this.notePaths = function notePaths(instrument) {
+  this.notePaths = function notePaths(instrument: string): {[key: string]: string} {
     const paths = {},
           l = sevenOctavePiano.length
 
-    for(let i = 0; i < l; i++) {
-      let note = sevenOctavePiano[i],
-          mp3Note = note
+    for(let i: number = 0; i < l; i++) {
+      let note: string = sevenOctavePiano[i],
+          mp3Note: string = note
       if(note[1] === '#') {
         mp3Note = nextLetter(note[0]) + 'b' + note[2]
       }
@@ -64,7 +79,12 @@ function Player() {
    * @return    {Tone.Buffer}       The buffer created for that pitch.
    * @private
    */
-  this.addBuffer = function addBuffer(instrument, note, url, callback = Tone.noOp) {
+  this.addBuffer = function addBuffer(
+    instrument: string,
+    note: {name: string},
+    url: string,
+    callback?: () => mixed = Tone.noOp
+  ): Tone.Buffer {
         if(!this.buffers.has(instrument)) {
           this.buffers.set(instrument, new Tone.Buffers())
         }
@@ -94,10 +114,11 @@ function Player() {
    * @return    {Tone.Buffers}    The buffers created for that instrument.
    * @private
    */
-  this.addBuffers =
-    function addBuffers(instrument,
-               notePathsObject = this.notePaths(instrument),
-               callback = Tone.noOp) {
+  this.addBuffers = function addBuffers(
+      instrument: string,
+      notePathsObject?: {[key: string]: string} = this.notePaths(instrument),
+      callback?: () => mixed = Tone.noOp
+    ): Tone.Buffers {
         if(!this.buffers.has(instrument)) {
           this.buffers.set(instrument, new Tone.Buffers(notePathsObject, callback))
         }
@@ -138,58 +159,61 @@ function Player() {
  * @param {(string|number)} duration  The duration in seconds for the note to be played.
  * @public
  */
-Player.prototype.triggerKey = function triggerKey(noteName, duration) {
-  this.multiPlayer.start(noteName, "+0.1", 0, duration)
+Player.prototype.triggerKey =
+  function triggerKey(
+    noteName: string,
+    duration: number
+  ) {
+    this.multiPlayer.start(noteName, "+0.1", 0, duration)
 }
 
-Player.prototype.addTrack = function addTrack(track, notes) {
-  if(!this.tracks.has(track.name)) {
-    if(notes.length) {
-      this.addInstrument(notes[0].instrument)
+Player.prototype.addTrack =
+  function addTrack(
+    track: {name: string},
+    notes: {
+      instrument: string,
+      name: string,
+      duration: number
+    }[]
+  ) {
+    if(!this.tracks.has(track.name)) {
+      if(notes.length) {
+        this.addInstrument(notes[0].instrument)
+      }
+      this.tracks.set(track.name, new Tone.Part(function(time, note) {
+        this.instruments.get(note.instrument).start(note.name, time, 0, note.duration)
+      }, notes))
     }
-    this.tracks.set(track.name, new Tone.Part(function(time, note) {
-      this.instruments.get(note.instrument).start(note.name, time, 0, note.duration)
-    }, notes))
-  }
 }
 
-// Player.prototype.addNote = function(note, part) {
-//   console.log('addNote was run:')
-//   console.log('instrument buffers before:', this.buffers.get(note.instrument))
-//   console.log('note buffer before:', this.buffers.get(note.instrument).get(note.name))
-//   console.log('note:', note)
-//
-//   let notePlayer = this.instruments.get(note.instrument)[note.name](note)
-//   console.log(notePlayer)
-//   if(notePlayer.loaded) {
-//     notePlayer.start(note.start_time, 0, note.duration)
-//   }
-// }
-
-Player.prototype.addInstrument = function(instrument) {
-  if(!this.instruments.has(instrument)) {
-    const buffers = this.addBuffers(instrument),
-          instrumentPlayer = new Tone.MultiPlayer(buffers).toMaster()
-    this.instruments.set(instrument, instrumentPlayer)
-  }
+Player.prototype.addInstrument =
+  function addInstrument(instrument: string) {
+    if(!this.instruments.has(instrument)) {
+      const buffers = this.addBuffers(instrument),
+            instrumentPlayer = new Tone.MultiPlayer(buffers).toMaster()
+      this.instruments.set(instrument, instrumentPlayer)
+    }
 }
 
-Player.prototype.play = function() {
-  Tone.Transport.start()
+Player.prototype.play = function play() {
+  Tone.Transport.start('+0.1')
 }
 
-Player.prototype.pause = function() {
+Player.prototype.pause = function pause() {
   Tone.Transport.pause()
 }
 
-Player.prototype.stop = function() {
+Player.prototype.stop = function stop() {
   Tone.Transport.stop()
 }
 
-Player.prototype.setTimer = function(callback) {
-  function setTimerCallback(){callback(Tone.Transport.seconds)}
+Player.prototype.setTimer = function setTimer(callback: (number) => mixed) {
+  function setTimerCallback() {callback(Tone.Transport.seconds)}
+  function setTimerDrawCallback(time: number) {
+    Tone.Draw.schedule(setTimerCallback, time)
+  }
   Tone.Transport.scheduleRepeat(
-    setTimerCallback,
+    setTimerDrawCallback,
     0.05
   )
 }
