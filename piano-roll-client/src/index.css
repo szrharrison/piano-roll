@@ -190,6 +190,10 @@ Licence: Attribution
   height: calc( var(--note-slot-width)*3/2 + 1px);
 }
 
+#nav-piano .wide:first-child, #nav-piano .wide:first-child .tut {
+  height: calc( var(--note-slot-width)*3/2 + 1px);
+}
+
 #nav-piano ul {box-shadow:0 2px 5px black}
 
 #nav-piano span,
@@ -210,6 +214,7 @@ Licence: Attribution
   outline:none;
   position:relative;
   overflow:hidden;
+  user-select: none;
 }
 
 #nav-piano span:focus,
